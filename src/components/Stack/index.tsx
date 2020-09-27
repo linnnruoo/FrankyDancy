@@ -18,22 +18,29 @@ interface Props {
   center?: boolean
   alignItems?: string
   justifyContent?: string
+  fillParentWidth?: boolean
+  fillParentHeight?: boolean
 }
 
 const Stack = styled.div<Props>`
   display: flex;
   flex-direction: ${({ vertical }) => (vertical ? 'column' : 'row')};
 
+  ${({ fillParentHeight }) => fillParentHeight && 'height: 100%;'}
+  ${({ fillParentWidth }) => fillParentWidth && 'width: 100%;'}
+
   ${({ center }) => center && 'align-items: center; justify-content: center;'}
-  ${({ alignItems }) => alignItems && `align-items: ${alignItems}`}
+  ${({ alignItems }) => alignItems && `align-items: ${alignItems};`}
   ${({ justifyContent }) =>
-    justifyContent && `justify-content: ${justifyContent}`}
+    justifyContent && `justify-content: ${justifyContent};`}
 
   & > * {
     margin-bottom: ${({ vertical, gutter }) =>
-      !vertical ? Gutter.NONE : gutter}
-    margin-right: ${({ vertical, gutter }) => (vertical ? Gutter.NONE : gutter)}
+      !vertical ? Gutter.NONE : gutter};
+    margin-right: ${({ vertical, gutter }) =>
+      vertical ? Gutter.NONE : gutter};
   }
+
   & > *:last-child {
     ${({ vertical }) =>
       vertical
