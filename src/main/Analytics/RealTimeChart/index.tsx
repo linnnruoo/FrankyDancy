@@ -7,19 +7,20 @@ import Stack from 'components/Stack'
 const socket = io('http://localhost:5000')
 
 const RealTimeChart: React.FC<{}> = () => {
+  const [data, setData] = React.useState({})
+
   const fetchData = () => {
-    socket.on('test123', () => {
-      console.log('retrieved')
-    })
+    console.log('debug1')
+    // subscribe to the server event
+    // socket.on('new movement received', (data: any) => {
+    //   console.log('retrieved', data)
+    //   setData(data)
+    // })
   }
 
   React.useEffect(fetchData, [])
 
-  return (
-    <Stack center>
-      <Card>TEST</Card>
-    </Stack>
-  )
+  return <Card width="100%">TEST</Card>
 }
 
 export default RealTimeChart

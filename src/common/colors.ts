@@ -1,1 +1,1 @@
-export const LIGHT_BLUE = 'EFF3F9'
+export const LIGHT_BLUE = 'FAFBFF'
