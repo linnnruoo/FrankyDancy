@@ -20,6 +20,7 @@ interface Props {
   justifyContent?: string
   fillParentWidth?: boolean
   fillParentHeight?: boolean
+  width?: string
 }
 
 const Stack = styled.div<Props>`
@@ -28,6 +29,7 @@ const Stack = styled.div<Props>`
 
   ${({ fillParentHeight }) => fillParentHeight && 'height: 100%;'}
   ${({ fillParentWidth }) => fillParentWidth && 'width: 100%;'}
+  ${({ width }) => width && `width: ${width}`}
 
   ${({ center }) => center && 'align-items: center; justify-content: center;'}
   ${({ alignItems }) => alignItems && `align-items: ${alignItems};`}

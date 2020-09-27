@@ -3,7 +3,7 @@
  */
 import React from 'react'
 import styled from 'styled-components'
-import { Button, Layout, Menu } from 'antd'
+import { Button, Layout } from 'antd'
 import Stack, { Gutter } from 'components/Stack'
 
 const { Header } = Layout
@@ -18,7 +18,7 @@ const Navbar: React.FC<{}> = () => {
         gutter={Gutter.SMALL}
       >
         <Button>Reset</Button>
-        <Button>Stop</Button>
+        <Button danger>Stop</Button>
       </Stack>
     </HeaderContainer>
   )

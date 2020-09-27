@@ -20,12 +20,7 @@ const RealTimeChart: React.FC<{}> = () => {
 
   React.useEffect(fetchData, [])
 
-  return (
-    <Stack center>
-      <Card>TEST</Card>
-      <h1>DATA: {data['move']}</h1>
-    </Stack>
-  )
+  return <Card width="100%">TEST</Card>
 }
 
 export default RealTimeChart
