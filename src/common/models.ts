@@ -13,6 +13,11 @@ export type Dancer = {
   dancerNo: Number
 }
 
+export interface DancerProfile extends Dancer {
+  name: string
+  url: string
+}
+
 export type Dance = {
   _id: string
   dancers: Dancer[]

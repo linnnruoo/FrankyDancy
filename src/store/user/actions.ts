@@ -13,7 +13,7 @@ export const fetchUsersAction = createAsyncAction(
 export const fetchUsers = () => (dispatch: Dispatch) => {
   dispatch(fetchUsersAction.request())
   axiosInstance
-    .get('/users/', { withCredentials: true })
+    .get('/users/')
     .then((res) => {
       const users: User[] = res.data
       dispatch(fetchUsersAction.success(users))
