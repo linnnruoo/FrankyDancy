@@ -1,19 +1,26 @@
 import React from 'react'
 
 import Card from 'components/Card'
-import Stack from 'components/Stack'
+import Stack, { Gutter } from 'components/Stack'
+import { Title } from 'components/Typography'
 
 const CurrentMove: React.FC<{}> = () => {
-  const [data, setData] = React.useState({})
+  const [move, setMove] = React.useState()
 
-  const fetchData = () => {}
+  const fetchNewMove = () => {}
 
-  React.useEffect(fetchData, [])
+  React.useEffect(fetchNewMove, [])
 
+  /**
+   * @todo: map move number to moves png
+   */
   return (
-    // <Stack fillParentWidth>
-    <Card width="40%">Current Move</Card>
-    // </Stack>
+    <Card width="40%">
+      <Stack vertical gutter={Gutter.AVERAGE}>
+        <Title>Current Move</Title>
+        <Stack center></Stack>
+      </Stack>
+    </Card>
   )
 }
 
