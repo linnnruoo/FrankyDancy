@@ -2,18 +2,24 @@ import React from 'react'
 
 import Card from 'components/Card'
 import Stack from 'components/Stack'
+import { Title } from 'components/Typography'
 
 const CurrentPosition: React.FC<{}> = () => {
-  const [data, setData] = React.useState({})
+  const [position, setPosition] = React.useState([0, 0, 0])
 
-  const fetchData = () => {}
+  const fetchCurrentPosition = () => {}
 
-  React.useEffect(fetchData, [])
+  React.useEffect(fetchCurrentPosition, [])
 
+  /**
+   * @todo: get the user profile photos, display them accordingly
+   * @todo: get the current dance session -> dance info
+   * @todo: map the position to user
+   */
   return (
-    // <Stack fillParentWidth>
-    <Card width="60%">TEST</Card>
-    // </Stack>
+    <Card width="60%">
+      <Title>Current Position</Title>
+    </Card>
   )
 }
 

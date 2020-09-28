@@ -11,7 +11,7 @@ const Card = styled.div<Props>`
   border: 1px solid #ebebeb;
   box-sizing: border-box;
   border-radius: 8px;
-  padding: 40px 30px;
+  padding: 20px 30px 30px;
   ${({ maxWidth }) => maxWidth && `max-width: ${maxWidth}px;`}
   ${({ minWidth }) => minWidth && `min-width: ${minWidth}px;`}
   ${({ width }) => width && `width: ${width};`}
