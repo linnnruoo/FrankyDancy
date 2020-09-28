@@ -1,8 +1,8 @@
 import { createAsyncAction } from 'typesafe-actions'
-import axios from 'axios'
 import { Dispatch } from 'redux'
 
 import { User } from 'common/models'
+import axiosInstance from 'configs/api'
 
 export const fetchUsersAction = createAsyncAction(
   'Fetch_Users__Request',
@@ -12,8 +12,8 @@ export const fetchUsersAction = createAsyncAction(
 
 export const fetchUsers = () => (dispatch: Dispatch) => {
   dispatch(fetchUsersAction.request())
-  axios
-    .get('/users/')
+  axiosInstance
+    .get('/users/', { withCredentials: true })
     .then((res) => {
       const users: User[] = res.data
       dispatch(fetchUsersAction.success(users))

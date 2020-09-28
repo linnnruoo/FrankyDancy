@@ -1,7 +1,14 @@
 import axios from 'axios'
 
-const configureAxios = () => {
-  axios.defaults.baseURL = process.env.REACT_APP_API_ENDPOINT
-}
+const axiosInstance = axios.create({
+  baseURL: process.env.REACT_APP_API_ENDPOINT,
+  withCredentials: true,
+  headers: {
+    'Access-Control-Allow-Origin': '*',
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+  },
+})
 
-export default configureAxios
+export default axiosInstance
