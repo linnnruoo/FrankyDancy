@@ -1,3 +1,5 @@
+import Move from 'common/moves'
+
 export type User = {
   _id: string
   name: string
@@ -16,17 +18,6 @@ export type Dance = {
   dancers: Dancer[]
   status: Number
   date: Date
-}
-
-export enum Move {
-  Elbowlock = 0,
-  Hair = 1,
-  Pushback = 2,
-  Rocket = 3,
-  Scarecrow = 4,
-  Shouldershrug = 5,
-  Windows = 6,
-  Zigzag = 7,
 }
 
 export type Movement = {

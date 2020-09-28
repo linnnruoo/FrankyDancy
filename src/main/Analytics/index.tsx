@@ -15,6 +15,9 @@ import CorrectPositions from './CorrectPositions'
 import CorrectMoves from './CorrectMoves'
 
 const Analytics: React.FC<{}> = () => {
+  /**
+   * @todo: set up socket connections here?
+   */
   return (
     <Layout style={{ height: '100vh' }}>
       <Navbar />
