@@ -1,16 +1,25 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { RootState } from 'store/rootReducer'
 
 import Card from 'components/Card'
 import Stack, { Gutter } from 'components/Stack'
 import { Title } from 'components/Typography'
+import { groupActiveDancerProfilesByDancerNo } from 'store/dance/selector'
+
 import AvatarCard from './AvatarCard'
 
-const CurrentPosition: React.FC<{}> = () => {
-  const [position, setPosition] = React.useState([0, 0, 0])
+type Props = CombinedProps<typeof mapStateToProps, {}> & OwnProps
 
-  const fetchCurrentPosition = () => {}
+interface OwnProps {
+  position: number[]
+}
 
-  React.useEffect(fetchCurrentPosition, [])
+const CurrentPosition: React.FC<Props> = ({
+  position,
+  dancerProfilesByDancerNo,
+}) => {
+  const getDancerProfile = (index: number) => dancerProfilesByDancerNo[index]
 
   /**
    * @todo: get the user profile photos, display them accordingly
@@ -23,13 +32,17 @@ const CurrentPosition: React.FC<{}> = () => {
       <Stack vertical gutter={Gutter.AVERAGE}>
         <Title>Current Position</Title>
         <Stack gutter={Gutter.SMALL} center>
-          <AvatarCard />
-          <AvatarCard />
-          <AvatarCard />
+          <AvatarCard dancerProfile={getDancerProfile(position[0])} />
+          <AvatarCard dancerProfile={getDancerProfile(position[1])} />
+          <AvatarCard dancerProfile={getDancerProfile(position[2])} />
         </Stack>
       </Stack>
     </Card>
   )
 }
 
-export default CurrentPosition
+const mapStateToProps = (s: RootState) => ({
+  dancerProfilesByDancerNo: groupActiveDancerProfilesByDancerNo(s),
+})
+
+export default connect(mapStateToProps)(CurrentPosition)

@@ -2,8 +2,13 @@
  * @todo: layout
  */
 import React from 'react'
+import { connect } from 'react-redux'
+import { RootState } from 'store/rootReducer'
 import { Layout } from 'antd'
 
+import socket from 'configs/socket'
+import { MOVEMENT_INSERTION_EVENT } from 'common/events'
+import { Movement } from 'common/models'
 import Navbar from 'components/Navbar'
 import SidePanel from 'components/SidePanel'
 import Stack, { Gutter } from 'components/Stack'
@@ -14,10 +19,29 @@ import CurrentPosition from './CurrentPosition'
 import CorrectPositions from './CorrectPositions'
 import CorrectMoves from './CorrectMoves'
 
-const Analytics: React.FC<{}> = () => {
+type Props = CombinedProps<typeof mapStateToProps, {}>
+
+const Analytics: React.FC<Props> = () => {
   /**
    * @todo: set up socket connections here?
    */
+  const [currPosition, setPosition] = React.useState([0, 0, 0])
+  const [currMove, setMove] = React.useState<number | undefined>(undefined)
+  const [predictedPos, setPredictedPos] = React.useState([0, 0, 0])
+  const [predictedMove, setPredictedMove] = React.useState<number | undefined>(
+    undefined,
+  )
+
+  const fetchCurrentMovement = () => {
+    socket.on(MOVEMENT_INSERTION_EVENT, (newMovement: Movement) => {
+      const { move, position } = newMovement
+      setPosition(position)
+      setMove(move)
+    })
+  }
+
+  React.useEffect(fetchCurrentMovement, [])
+
   return (
     <Layout style={{ height: '100vh' }}>
       <Navbar />
@@ -26,8 +50,8 @@ const Analytics: React.FC<{}> = () => {
         <Layout style={{ padding: '24px 24px 24px' }}>
           <Stack gutter={Gutter.SMALL} vertical>
             <Stack gutter={Gutter.SMALL}>
-              <CurrentPosition />
-              <CurrentMove />
+              <CurrentPosition position={currPosition} />
+              <CurrentMove move={currMove} />
             </Stack>
             <RealTimeChart />
             <Stack gutter={Gutter.SMALL}>
@@ -41,4 +65,6 @@ const Analytics: React.FC<{}> = () => {
   )
 }
 
-export default Analytics
+const mapStateToProps = (s: RootState) => ({})
+
+export default connect(mapStateToProps)(Analytics)

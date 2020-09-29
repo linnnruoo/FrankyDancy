@@ -23,8 +23,8 @@ export const getActiveDancerProfiles = createSelector(
     const dancerProfiles: DancerProfile[] = _.map(dancers, (dancer) => {
       return {
         ...dancer,
-        name: users[dancer.userId].name,
-        url: users[dancer.userId].url,
+        name: _.get(users[dancer.userId], 'name'),
+        url: _.get(users[dancer.userId], 'url'),
       }
     })
     return dancerProfiles
