@@ -1,3 +1,9 @@
 body {
   background-color: #eff3f9;
 }
+
+canvas {
+  width: 100% !important;
+  min-height: 300px !important;
+  height: 300px !important;
+}

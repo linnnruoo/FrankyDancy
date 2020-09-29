@@ -2,13 +2,11 @@
  * @todo: layout
  */
 import React from 'react'
-import { connect } from 'react-redux'
-import { RootState } from 'store/rootReducer'
 import { Layout } from 'antd'
 
 import socket from 'configs/socket'
 import * as events from 'common/events'
-import { Movement, Sensor } from 'common/models'
+import { Movement } from 'common/models'
 import Navbar from 'components/Navbar'
 import SidePanel from 'components/SidePanel'
 import Stack, { Gutter } from 'components/Stack'
@@ -19,9 +17,7 @@ import CurrentPosition from './CurrentPosition'
 import CorrectPositions from './CorrectPositions'
 import CorrectMoves from './CorrectMoves'
 
-type Props = CombinedProps<typeof mapStateToProps, {}>
-
-const Analytics: React.FC<Props> = () => {
+const Analytics: React.FC<{}> = () => {
   /**
    * @todo: set up socket connections here?
    */
@@ -31,7 +27,6 @@ const Analytics: React.FC<Props> = () => {
   // const [predictedMove, setPredictedMove] = React.useState<number | undefined>(
   // undefined,
   // )
-  // const [sensorData, setSensorData] = React.useState<Sensor[]>([])
 
   const fetchCurrentMovement = () => {
     socket.on(events.MOVEMENT_INSERTION_EVENT, (newMovement: Movement) => {
@@ -39,6 +34,9 @@ const Analytics: React.FC<Props> = () => {
       setPosition(position)
       setMove(move)
     })
+    return () => {
+      socket.disconnect()
+    }
   }
 
   React.useEffect(fetchCurrentMovement, [])
@@ -66,6 +64,4 @@ const Analytics: React.FC<Props> = () => {
   )
 }
 
-const mapStateToProps = (s: RootState) => ({})
-
-export default connect(mapStateToProps)(Analytics)
+export default Analytics
