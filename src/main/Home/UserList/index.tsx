@@ -1,5 +1,5 @@
 import React from 'react'
-import { List, Tag } from 'antd'
+import { List } from 'antd'
 import styled from 'styled-components'
 import _ from 'lodash'
 

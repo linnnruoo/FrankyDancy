@@ -7,8 +7,8 @@ import { RootState } from 'store/rootReducer'
 import { Layout } from 'antd'
 
 import socket from 'configs/socket'
-import { MOVEMENT_INSERTION_EVENT } from 'common/events'
-import { Movement } from 'common/models'
+import * as events from 'common/events'
+import { Movement, Sensor } from 'common/models'
 import Navbar from 'components/Navbar'
 import SidePanel from 'components/SidePanel'
 import Stack, { Gutter } from 'components/Stack'
@@ -27,13 +27,14 @@ const Analytics: React.FC<Props> = () => {
    */
   const [currPosition, setPosition] = React.useState([0, 0, 0])
   const [currMove, setMove] = React.useState<number | undefined>(undefined)
-  const [predictedPos, setPredictedPos] = React.useState([0, 0, 0])
-  const [predictedMove, setPredictedMove] = React.useState<number | undefined>(
-    undefined,
-  )
+  // const [predictedPos, setPredictedPos] = React.useState([0, 0, 0])
+  // const [predictedMove, setPredictedMove] = React.useState<number | undefined>(
+  // undefined,
+  // )
+  // const [sensorData, setSensorData] = React.useState<Sensor[]>([])
 
   const fetchCurrentMovement = () => {
-    socket.on(MOVEMENT_INSERTION_EVENT, (newMovement: Movement) => {
+    socket.on(events.MOVEMENT_INSERTION_EVENT, (newMovement: Movement) => {
       const { move, position } = newMovement
       setPosition(position)
       setMove(move)

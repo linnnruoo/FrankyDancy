@@ -48,7 +48,7 @@ export type SensorReading = {
 
 export type Sensor = {
   _id: string
-  dancerNo: string
+  dancerNo: number
   accelerometer: SensorReading
   gyroscope: SensorReading
   date: Date

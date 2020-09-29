@@ -6,3 +6,5 @@ declare type CombinedProps<
 declare interface Dict<T> {
   [k: string]: T
 }
+
+declare module 'chartjs-plugin-streaming'
