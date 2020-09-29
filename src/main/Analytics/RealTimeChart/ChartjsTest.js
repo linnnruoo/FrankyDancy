@@ -1,12 +1,11 @@
 import React from 'react'
 import moment from 'moment'
+import { Line } from 'react-chartjs-2'
 
 import socket from 'configs/socket'
 import * as events from 'common/events'
-import { Line } from 'react-chartjs-2'
 import Stack from 'components/Stack'
 import { getMinSec } from 'utilities/datetime'
-import styled from 'styled-components'
 
 class ChartTest extends React.Component {
   constructor(props) {
