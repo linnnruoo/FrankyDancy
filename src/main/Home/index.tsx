@@ -6,6 +6,7 @@ import { RootState } from 'store/rootReducer'
 import { getUsers } from 'store/user/selectors'
 import Logo from 'components/Logo'
 import Stack from 'components/Stack'
+
 import UserList from './UserList'
 
 type Props = CombinedProps<typeof mapStateToProps, typeof mapDispatchToProps>

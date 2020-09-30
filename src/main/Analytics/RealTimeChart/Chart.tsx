@@ -1,3 +1,7 @@
+/**
+ * https://www.educative.io/edpresso/how-to-use-chartjs-to-create-charts-in-react
+ * https://medium.com/@oxygenna/real-time-cryptocurrency-visualisations-using-react-websockets-and-chartjs-e4a76132a862
+ */
 import React from 'react'
 import moment from 'moment'
 import { Line } from 'react-chartjs-2'
