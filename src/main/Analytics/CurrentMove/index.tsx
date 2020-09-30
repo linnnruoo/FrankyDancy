@@ -3,7 +3,7 @@ import React from 'react'
 import Card from 'components/Card'
 import Stack, { Gutter } from 'components/Stack'
 import { Text, Title } from 'components/Typography'
-import Move, { getMoveName, getMoveUrl, MoveUrl } from 'common/moves'
+import Move, { getMoveName, getMoveUrl } from 'common/moves'
 
 interface Props {
   move?: Move
@@ -22,12 +22,7 @@ const CurrentMove: React.FC<Props> = ({ move }) => {
         </>
       )
     }
-    return (
-      <>
-        <img width="80%" src={MoveUrl.Elbowlock} alt="test" />
-        <Text>Loading...</Text>
-      </>
-    )
+    return <Text>Loading...</Text>
   }
 
   return (

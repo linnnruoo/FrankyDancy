@@ -18,6 +18,8 @@ import CorrectPositions from './CorrectPositions'
 import CorrectMoves from './CorrectMoves'
 
 const Analytics: React.FC<{}> = () => {
+  // reset sensor data
+  const [toReset, setReset] = React.useState(false)
   /**
    * @todo: set up socket connections here?
    */
@@ -35,7 +37,9 @@ const Analytics: React.FC<{}> = () => {
       setMove(move)
     })
     return () => {
+      socket.emit('disconnect')
       socket.disconnect()
+      socket.close()
     }
   }
 
@@ -43,7 +47,7 @@ const Analytics: React.FC<{}> = () => {
 
   return (
     <Layout style={{ height: '100vh' }}>
-      <Navbar />
+      <Navbar setReset={setReset} />
       <Layout>
         <SidePanel />
         <Layout style={{ padding: '24px 24px 24px' }}>
@@ -52,7 +56,7 @@ const Analytics: React.FC<{}> = () => {
               <CurrentPosition position={currPosition} />
               <CurrentMove move={currMove} />
             </Stack>
-            <RealTimeChart />
+            <RealTimeChart toReset={toReset} setReset={setReset} />
             <Stack gutter={Gutter.SMALL}>
               <CorrectPositions />
               <CorrectMoves />
