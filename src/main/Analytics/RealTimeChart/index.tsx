@@ -19,7 +19,7 @@ const RealTimeChart: React.FC<Props> = ({ toReset, setReset }) => {
   React.useEffect(fetchData, [])
 
   return (
-    <Card width="100%">
+    <Card width="100%" style={{ position: 'relative', padding: 0 }}>
       <DancerPanel />
       <Chart toReset={toReset} setReset={setReset} />
     </Card>

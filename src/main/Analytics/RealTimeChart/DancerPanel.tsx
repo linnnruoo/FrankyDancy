@@ -36,11 +36,15 @@ const DancerPanel: React.FC<Props> = ({ dancerProfilesByDancerNo }) => {
 }
 
 const PanelContainer = styled(Stack)`
+  top: 10px;
+  left: 10px;
   background: #fff;
   box-shadow: 0px 1px 5px #c7c7c7;
   padding: 10px;
   border-radius: 8px;
   position: absolute;
+  border: 1px solid #000;
+  font-weight: 600;
 `
 
 const Legend = styled.div<{ color: string }>`

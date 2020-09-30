@@ -135,7 +135,7 @@ const Chart: React.FC<Props> = ({ toReset, setReset }) => {
   React.useEffect(resetSensorData, [toReset])
 
   return (
-    <Stack style={{ width: '100%', height: 'auto', paddingTop: 20 }}>
+    <Stack style={{ width: '100%', height: 'auto', padding: '40px 40px 30px' }}>
       <Line data={chartData} options={chartOptions} />
     </Stack>
   )
