@@ -4,6 +4,7 @@ import Card from 'components/Card'
 
 // import Chart from './ChartjsTest'
 import Chart from './Chart'
+import DancerPanel from './DancerPanel'
 
 interface Props {
   toReset: boolean
@@ -19,6 +20,7 @@ const RealTimeChart: React.FC<Props> = ({ toReset, setReset }) => {
 
   return (
     <Card width="100%">
+      <DancerPanel />
       <Chart toReset={toReset} setReset={setReset} />
     </Card>
   )

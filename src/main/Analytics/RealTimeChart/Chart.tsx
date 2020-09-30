@@ -9,6 +9,7 @@ import Stack from 'components/Stack'
 import { Sensor } from 'common/models'
 
 let sensorData: number[] = []
+let dummyData: number[] = []
 let sensorLabels: string[] = []
 
 const chartOptions = {
@@ -49,16 +50,25 @@ interface Props {
 const Chart: React.FC<Props> = ({ toReset, setReset }) => {
   const now = moment(new Date())
 
+  // Hardcode 3 datasets input
   const [chartData, setChartData] = React.useState({
     labels: [] as string[],
     datasets: [
       {
         type: 'line',
-        label: 'user 1',
+        label: 'User 1',
         lineTension: 0.5,
         fill: false,
         data: [] as number[],
         borderColor: '#4ed5ab',
+      },
+      {
+        type: 'line',
+        label: 'User 2',
+        lineTension: 0.5,
+        fill: false,
+        data: [] as number[],
+        borderColor: '#8a5fd6',
       },
     ],
   })
@@ -70,8 +80,11 @@ const Chart: React.FC<Props> = ({ toReset, setReset }) => {
 
       // manage data
       sensorData = [...sensorData, value]
+      // TODO: delete dummy data
+      dummyData = [...dummyData, value + 0.1]
       if (sensorData.length >= 50) {
         sensorData.shift()
+        dummyData.shift()
       }
 
       // manage labels
@@ -84,9 +97,14 @@ const Chart: React.FC<Props> = ({ toReset, setReset }) => {
     // set new label and data
     const interval = setInterval(() => {
       const oldDataset = chartData.datasets[0]
+      // TODO delete dummy
+      const oldDummy = chartData.datasets[1]
       const newChartData = {
         ...chartData,
-        datasets: [{ ...oldDataset, data: sensorData }],
+        datasets: [
+          { ...oldDataset, data: sensorData },
+          { ...oldDummy, data: dummyData },
+        ],
         labels: sensorLabels,
       }
       setChartData(newChartData)
@@ -107,6 +125,8 @@ const Chart: React.FC<Props> = ({ toReset, setReset }) => {
   const resetSensorData = () => {
     if (toReset) {
       sensorData = []
+      // TODO delete dummy
+      dummyData = []
       sensorLabels = []
       setReset(false)
     }
@@ -115,7 +135,7 @@ const Chart: React.FC<Props> = ({ toReset, setReset }) => {
   React.useEffect(resetSensorData, [toReset])
 
   return (
-    <Stack style={{ width: '100%', height: 'auto' }}>
+    <Stack style={{ width: '100%', height: 'auto', paddingTop: 20 }}>
       <Line data={chartData} options={chartOptions} />
     </Stack>
   )
