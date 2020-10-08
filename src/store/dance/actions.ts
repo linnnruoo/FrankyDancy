@@ -2,7 +2,7 @@ import { createAsyncAction } from 'typesafe-actions'
 import { Dispatch } from 'redux'
 import _ from 'lodash'
 
-import { Dance } from 'common/models'
+import { Dance, Dancer } from 'common/models'
 import axiosInstance from 'configs/api'
 
 export const fetchActiveDanceSessionAction = createAsyncAction(
@@ -17,12 +17,18 @@ export const endActiveDanceSessionAction = createAsyncAction(
   'End_Dance_Session__Failure',
 )<void, void, Error>()
 
+export const startNewDanceSessionAction = createAsyncAction(
+  'Start_New_Dance_Session__Request',
+  'Start_New_Dance_Session__Success',
+  'Start_New_Dance_Session__Failure',
+)<void, Dance, Error>()
+
 export const fetchActiveDanceSession = () => (dispatch: Dispatch) => {
   dispatch(fetchActiveDanceSessionAction.request())
   axiosInstance
     .get('/dance/active')
     .then((res) => {
-      const dance: Dance = _.get(res, 'data', [])
+      const dance: Dance = _.get(res, 'data', {})
       dispatch(fetchActiveDanceSessionAction.success(dance))
     })
     .catch((err) => dispatch(fetchActiveDanceSessionAction.failure(err)))
@@ -31,7 +37,20 @@ export const fetchActiveDanceSession = () => (dispatch: Dispatch) => {
 export const endDanceSession = () => (dispatch: Dispatch) => {
   dispatch(endActiveDanceSessionAction.request())
   axiosInstance
-    .post(`/end`)
-    .then(() => endActiveDanceSessionAction.success())
+    .post(`/dance/end`)
+    .then(() => dispatch(endActiveDanceSessionAction.success()))
     .catch((err) => endActiveDanceSessionAction.failure(err))
+}
+
+export const startDanceSession = (newDancers: Dancer[]) => (
+  dispatch: Dispatch,
+) => {
+  dispatch(startNewDanceSessionAction.request())
+  axiosInstance
+    .post('/dance/', { dancers: newDancers })
+    .then((res) => {
+      const dance: Dance = _.get(res, 'data', {})
+      dispatch(startNewDanceSessionAction.success(dance))
+    })
+    .catch((err) => dispatch(startNewDanceSessionAction.failure(err)))
 }

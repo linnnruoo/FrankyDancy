@@ -13,7 +13,7 @@ const Logo = () => {
 }
 
 const LogoContainer = styled(Stack)`
-  padding: 80px 0px 0px;
+  padding: 50px 0px 0px;
 `
 
 const LogoName = styled(Text)`
