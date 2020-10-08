@@ -3,19 +3,27 @@ import { List } from 'antd'
 import styled from 'styled-components'
 import _ from 'lodash'
 
-import { User } from 'common/models'
+import { Dancer, User } from 'common/models'
 import Stack, { Gutter } from 'components/Stack'
 import Card from 'components/Card'
 import Avatar from 'components/Avatar'
 import { Text } from 'components/Typography'
-import { RED } from 'common/colors'
+import { RED, GREEN } from 'common/colors'
 
 interface Props {
   users: Dict<User>
+  activeDancers: Dict<Dancer>
 }
 
-const UserList: React.FC<Props> = ({ users }) => {
-  const renderUserStatus = () => {
+const UserList: React.FC<Props> = ({ users, activeDancers }) => {
+  const renderUserStatus = (userId: string) => {
+    if (activeDancers[userId]) {
+      return (
+        <Text fontWeight="bold" color={GREEN}>
+          Active
+        </Text>
+      )
+    }
     return (
       <Text fontWeight="bold" color={RED}>
         Idle
@@ -38,7 +46,7 @@ const UserList: React.FC<Props> = ({ users }) => {
                 <Avatar width={32} src={user.url} alt={user.name} />
                 <Text>{user.name}</Text>
               </Stack>
-              {renderUserStatus()}
+              {renderUserStatus(user._id)}
             </Stack>
           </List.Item>
         )}

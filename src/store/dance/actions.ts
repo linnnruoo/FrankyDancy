@@ -11,6 +11,12 @@ export const fetchActiveDanceSessionAction = createAsyncAction(
   'Fetch_Active_Dance_Session__Failure',
 )<void, Dance, Error>()
 
+export const endActiveDanceSessionAction = createAsyncAction(
+  'End_Dance_Session__Request',
+  'End_Dance_Session__Success',
+  'End_Dance_Session__Failure',
+)<void, void, Error>()
+
 export const fetchActiveDanceSession = () => (dispatch: Dispatch) => {
   dispatch(fetchActiveDanceSessionAction.request())
   axiosInstance
@@ -20,4 +26,12 @@ export const fetchActiveDanceSession = () => (dispatch: Dispatch) => {
       dispatch(fetchActiveDanceSessionAction.success(dance))
     })
     .catch((err) => dispatch(fetchActiveDanceSessionAction.failure(err)))
+}
+
+export const endDanceSession = () => (dispatch: Dispatch) => {
+  dispatch(endActiveDanceSessionAction.request())
+  axiosInstance
+    .post(`/end`)
+    .then(() => endActiveDanceSessionAction.success())
+    .catch((err) => endActiveDanceSessionAction.failure(err))
 }

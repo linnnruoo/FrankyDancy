@@ -8,11 +8,12 @@ import Stack, { Gutter } from 'components/Stack'
 
 interface Props {
   setReset: (reset: boolean) => void
+  endDanceSession: () => void
 }
 
 const { Header } = Layout
 
-const Navbar: React.FC<Props> = ({ setReset }) => {
+const Navbar: React.FC<Props> = ({ setReset, endDanceSession }) => {
   return (
     <HeaderContainer>
       <Stack
@@ -22,7 +23,9 @@ const Navbar: React.FC<Props> = ({ setReset }) => {
         gutter={Gutter.SMALL}
       >
         <Button onClick={() => setReset(true)}>Reset</Button>
-        <Button danger>Stop</Button>
+        <Button onClick={() => endDanceSession()} danger>
+          Stop
+        </Button>
       </Stack>
     </HeaderContainer>
   )

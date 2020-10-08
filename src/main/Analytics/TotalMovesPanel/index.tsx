@@ -2,12 +2,12 @@ import React from 'react'
 
 import Card from 'components/Card'
 
-const CorrectMoves: React.FC<{}> = () => {
+const TotalMovesPanel: React.FC<{}> = () => {
   const fetchData = () => {}
 
   React.useEffect(fetchData, [])
 
-  return <Card width="70%">Correct Move</Card>
+  return <Card width="70%">Total Moves</Card>
 }
 
-export default CorrectMoves
+export default TotalMovesPanel

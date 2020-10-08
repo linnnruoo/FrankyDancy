@@ -41,3 +41,8 @@ export const groupActiveDancerProfilesByDancerNo = createSelector(
     return groupedDancerProfiles
   },
 )
+
+export const groupActiveDancersByUserId = createSelector(
+  [getActiveDancers],
+  (dancers) => _.keyBy(dancers, 'userId'),
+)
