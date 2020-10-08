@@ -1,5 +1,4 @@
 enum Move {
-  Elbowlock = 0,
   Hair = 1,
   Pushback = 2,
   Rocket = 3,
@@ -7,6 +6,7 @@ enum Move {
   Shouldershrug = 5,
   Windows = 6,
   Zigzag = 7,
+  Elbowlock = 8,
 }
 
 export enum MoveUrl {
@@ -20,9 +20,9 @@ export enum MoveUrl {
   Zigzag = 'https://i.imgur.com/2dENb9M.png',
 }
 
-export const getMoveName = (move: Move) => Move[move]
+export const getMoveName = (move: Move): string => Move[move]
 
-export const getMoveUrl = (move: Move) => {
+export const getMoveUrl = (move: Move): string => {
   const moveName = Move[move] // key
   return MoveUrl[moveName]
 }

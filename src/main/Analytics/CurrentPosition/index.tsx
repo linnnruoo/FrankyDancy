@@ -20,13 +20,6 @@ const CurrentPosition: React.FC<Props> = ({
   dancerProfilesByDancerNo,
 }) => {
   const getDancerProfile = (index: number) => dancerProfilesByDancerNo[index]
-
-  /**
-   * @todo: get the user profile photos, display them accordingly
-   * @todo: get the current dance session -> dance info
-   * @todo: map the position to user
-   * @todo: map Dancer -> User
-   */
   return (
     <Card width="60%">
       <Stack vertical gutter={Gutter.AVERAGE}>

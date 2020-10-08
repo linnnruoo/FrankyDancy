@@ -6,9 +6,13 @@ import styled from 'styled-components'
 import { Button, Layout } from 'antd'
 import Stack, { Gutter } from 'components/Stack'
 
+interface Props {
+  setReset: (reset: boolean) => void
+}
+
 const { Header } = Layout
 
-const Navbar: React.FC<{}> = () => {
+const Navbar: React.FC<Props> = ({ setReset }) => {
   return (
     <HeaderContainer>
       <Stack
@@ -17,7 +21,7 @@ const Navbar: React.FC<{}> = () => {
         alignItems="center"
         gutter={Gutter.SMALL}
       >
-        <Button>Reset</Button>
+        <Button onClick={() => setReset(true)}>Reset</Button>
         <Button danger>Stop</Button>
       </Stack>
     </HeaderContainer>

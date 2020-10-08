@@ -1,26 +1,29 @@
 import React from 'react'
-import io from 'socket.io-client'
 
 import Card from 'components/Card'
-import Stack from 'components/Stack'
 
-const socket = io('')
+// import Chart from './ChartjsTest'
+import Chart from './Chart'
+import DancerPanel from './DancerPanel'
 
-const RealTimeChart: React.FC<{}> = () => {
-  const [data, setData] = React.useState({})
+interface Props {
+  toReset: boolean
+  setReset: (reset: boolean) => void
+}
 
-  const fetchData = () => {
-    console.log('debug1')
-    // subscribe to the server event
-    // socket.on('new movement received', (data: any) => {
-    //   console.log('retrieved', data)
-    //   setData(data)
-    // })
-  }
+const RealTimeChart: React.FC<Props> = ({ toReset, setReset }) => {
+  // TODO hardcode 3 datasets
+
+  const fetchData = () => {}
 
   React.useEffect(fetchData, [])
 
-  return <Card width="100%">TEST</Card>
+  return (
+    <Card width="100%" style={{ position: 'relative', padding: 0 }}>
+      <DancerPanel />
+      <Chart toReset={toReset} setReset={setReset} />
+    </Card>
+  )
 }
 
 export default RealTimeChart
