@@ -20,4 +20,11 @@ export enum MoveUrl {
   Zigzag = 'https://i.imgur.com/2dENb9M.png',
 }
 
+export const getMoveName = (move: Move) => Move[move]
+
+export const getMoveUrl = (move: Move) => {
+  const moveName = Move[move] // key
+  return MoveUrl[moveName]
+}
+
 export default Move

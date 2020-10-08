@@ -3,19 +3,23 @@ import React from 'react'
 import Stack, { Gutter } from 'components/Stack'
 import Avatar from 'components/Avatar'
 import { Text } from 'components/Typography'
-import { User } from 'common/models'
+import { DancerProfile } from 'common/models'
 
 interface Props {
-  user?: User
+  dancerProfile?: DancerProfile
 }
 
-const AvatarCard: React.FC<Props> = ({ user }) => {
+const AvatarCard: React.FC<Props> = ({ dancerProfile }) => {
   const renderUser = () => {
-    if (user) {
+    if (dancerProfile) {
       return (
         <>
-          <Avatar src={user.url} alt={user.name} width={'80%'} />
-          <Text>{user.name}</Text>
+          <Avatar
+            src={dancerProfile.url}
+            alt={dancerProfile.name}
+            width={'80%'}
+          />
+          <Text>{dancerProfile.name}</Text>
         </>
       )
     }
