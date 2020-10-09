@@ -9,7 +9,8 @@ import { RootState } from 'store/rootReducer'
 
 import socket from 'configs/socket'
 import * as events from 'common/events'
-import { Movement } from 'common/models'
+import { PredictedMovement } from 'common/models'
+import Move from 'common/moves'
 import { endDanceSession } from 'store/dance/actions'
 import Navbar from 'components/Navbar'
 import SidePanel from 'components/SidePanel'
@@ -28,14 +29,17 @@ const Analytics: React.FC<Props> = ({ endDanceSession }) => {
   const [toReset, setReset] = React.useState(false)
 
   const [currPosition, setPosition] = React.useState([0, 0, 0])
-  const [currMove, setMove] = React.useState<number | undefined>(undefined)
+  const [currMove, setMove] = React.useState<Move>()
 
   const fetchCurrentMovement = () => {
-    socket.on(events.MOVEMENT_INSERTION_EVENT, (newMovement: Movement) => {
-      const { move, position } = newMovement
-      setPosition(position)
-      setMove(move)
-    })
+    socket.on(
+      events.PREDICTED_MOVEMENT_INSERTION_EVENT,
+      (newMovement: PredictedMovement) => {
+        const { move, position } = newMovement
+        setPosition(position)
+        setMove(move)
+      },
+    )
     return () => {
       socket.emit('disconnect')
       socket.disconnect()
@@ -59,7 +63,7 @@ const Analytics: React.FC<Props> = ({ endDanceSession }) => {
             <RealTimeChart toReset={toReset} setReset={setReset} />
             <Stack gutter={Gutter.SMALL}>
               <CorrectPositions />
-              <TotalMovesPanel />
+              <TotalMovesPanel currMove={currMove} />
             </Stack>
           </Stack>
         </Layout>

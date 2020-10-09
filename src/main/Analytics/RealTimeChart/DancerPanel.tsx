@@ -7,6 +7,7 @@ import Stack, { Gutter } from 'components/Stack'
 import { RootState } from 'store/rootReducer'
 import { groupActiveDancerProfilesByDancerNo } from 'store/dance/selector'
 import { Text } from 'components/Typography'
+import { MINT, PUMPKIN, VIOLET } from 'common/colors'
 
 type Props = CombinedProps<typeof mapStateToProps, {}>
 
@@ -20,15 +21,15 @@ const DancerPanel: React.FC<Props> = ({ dancerProfilesByDancerNo }) => {
   return (
     <PanelContainer vertical gutter={Gutter.MINI}>
       <Stack gutter={Gutter.MINI} alignItems="center">
-        <Legend color="#4ed5ab" />
+        <Legend color={MINT} />
         <Text>{_.get(dancerProfilesByDancerNo[1], 'name', '')}</Text>
       </Stack>
       <Stack gutter={Gutter.MINI} alignItems="center">
-        <Legend color="#8a5fd6" />
+        <Legend color={VIOLET} />
         <Text>{_.get(dancerProfilesByDancerNo[2], 'name', '')}</Text>
       </Stack>
       <Stack gutter={Gutter.MINI} alignItems="center">
-        <Legend color="#fd8e59" />
+        <Legend color={PUMPKIN} />
         <Text>{_.get(dancerProfilesByDancerNo[3], 'name', '')}</Text>
       </Stack>
     </PanelContainer>

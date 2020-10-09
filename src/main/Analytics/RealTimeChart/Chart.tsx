@@ -11,6 +11,7 @@ import { getMinSec } from 'utilities/datetime'
 import * as events from 'common/events'
 import Stack from 'components/Stack'
 import { Sensor } from 'common/models'
+import { MINT, VIOLET } from 'common/colors'
 
 let sensorData: number[] = []
 let dummyData: number[] = []
@@ -64,7 +65,7 @@ const Chart: React.FC<Props> = ({ toReset, setReset }) => {
         lineTension: 0.5,
         fill: false,
         data: [] as number[],
-        borderColor: '#4ed5ab',
+        borderColor: MINT,
       },
       {
         type: 'line',
@@ -72,7 +73,7 @@ const Chart: React.FC<Props> = ({ toReset, setReset }) => {
         lineTension: 0.5,
         fill: false,
         data: [] as number[],
-        borderColor: '#8a5fd6',
+        borderColor: VIOLET,
       },
     ],
   })

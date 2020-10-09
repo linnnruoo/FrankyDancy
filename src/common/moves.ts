@@ -20,11 +20,28 @@ export enum MoveUrl {
   Zigzag = 'https://i.imgur.com/2dENb9M.png',
 }
 
-export const getMoveName = (move: Move): string => Move[move]
+export enum MoveName {
+  Hair = 'Hair',
+  Pushback = 'Pushback',
+  Rocket = 'Rocket',
+  Scarecrow = 'Scarecrow',
+  Shouldershrug = 'Shoulder Shrug',
+  Windows = 'Windows',
+  Zigzag = 'Zig Zag',
+  Elbowlock = 'Elbow Lock',
+}
+
+export const getMoveKeys = () =>
+  Object.keys(Move).filter((x) => !(parseInt(x) >= 0))
+
+export const getMoveName = (move: Move): string => {
+  const moveKey = Move[move]
+  return MoveName[moveKey]
+}
 
 export const getMoveUrl = (move: Move): string => {
-  const moveName = Move[move] // key
-  return MoveUrl[moveName]
+  const moveKey = Move[move] // key
+  return MoveUrl[moveKey]
 }
 
 export default Move

@@ -26,7 +26,7 @@ const AvatarCard: React.FC<Props> = ({ dancerProfile }) => {
     return (
       <>
         <Avatar
-          src="https://tinyurl.com/y2oaju7c"
+          src="https://i.imgur.com/3MvrSRQ.jpg"
           alt="placeholder"
           width={'80%'}
         />
