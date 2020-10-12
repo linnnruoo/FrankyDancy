@@ -1,5 +1,6 @@
 import React from 'react'
 import { Bar } from 'react-chartjs-2'
+import styled from 'styled-components'
 
 import Card from 'components/Card'
 import Stack, { Gutter } from 'components/Stack'
@@ -31,7 +32,7 @@ const CurrentPositionsHitPanel: React.FC<{}> = () => {
         borderWidth: 2,
         backgroundColor: [MINT, VIOLET, PUMPKIN],
         borderColor: [MINT, VIOLET, PUMPKIN],
-        data: [0, 0, 0],
+        data: [3, 11, 0],
       },
     ],
   })
@@ -44,10 +45,20 @@ const CurrentPositionsHitPanel: React.FC<{}> = () => {
     <Card width="30%">
       <Stack vertical gutter={Gutter.SMALL}>
         <Title>Correct Positions Hit</Title>
-        <Bar data={chartData} options={chartOptions} />
+        <ChartContainer>
+          <Bar data={chartData} options={chartOptions} />
+        </ChartContainer>
       </Stack>
     </Card>
   )
 }
+
+const ChartContainer = styled(Stack)`
+  canvas {
+    width: 100% !important;
+    min-height: 200px !important;
+    height: 200px !important;
+  }
+`
 
 export default CurrentPositionsHitPanel

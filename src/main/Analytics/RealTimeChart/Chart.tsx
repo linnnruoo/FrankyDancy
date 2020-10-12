@@ -5,6 +5,7 @@
 import React from 'react'
 import moment from 'moment'
 import { Line } from 'react-chartjs-2'
+import styled from 'styled-components'
 
 import socket from 'configs/socket'
 import { getMinSec } from 'utilities/datetime'
@@ -141,9 +142,19 @@ const Chart: React.FC<Props> = ({ toReset, setReset }) => {
 
   return (
     <Stack style={{ width: '100%', height: 'auto', padding: '40px 40px 30px' }}>
-      <Line data={chartData} options={chartOptions} />
+      <ChartContainer>
+        <Line data={chartData} options={chartOptions} />
+      </ChartContainer>
     </Stack>
   )
 }
+
+const ChartContainer = styled(Stack)`
+  canvas {
+    width: 100% !important;
+    min-height: 300px !important;
+    height: 300px !important;
+  }
+`
 
 export default Chart

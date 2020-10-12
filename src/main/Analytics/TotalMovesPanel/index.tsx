@@ -61,7 +61,10 @@ const TotalMovesPanel: React.FC<Props> = ({ currMove }) => {
               return (
                 <Stack vertical>
                   <Text>{moveName}</Text>
-                  <ProgressBar percent={getPercentage(moveCounts[moveKey])} />
+                  <ProgressBar
+                    percent={getPercentage(moveCounts[moveKey])}
+                    count={moveCounts[moveKey]}
+                  />
                 </Stack>
               )
             })}
@@ -72,7 +75,10 @@ const TotalMovesPanel: React.FC<Props> = ({ currMove }) => {
               return (
                 <Stack vertical>
                   <Text>{moveName}</Text>
-                  <ProgressBar percent={getPercentage(moveCounts[moveKey])} />
+                  <ProgressBar
+                    percent={getPercentage(moveCounts[moveKey])}
+                    count={moveCounts[moveKey]}
+                  />
                 </Stack>
               )
             })}
