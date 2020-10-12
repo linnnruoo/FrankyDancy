@@ -48,6 +48,7 @@ const UserList: React.FC<Props> = ({
   const onStartNewDanceSession = () => {
     const dancers = _.map(selectedUsers, (userId, index) => ({
       userId,
+      beetleId: users[userId].beetleId,
       dancerNo: index + 1,
     }))
     startDanceSession(dancers)

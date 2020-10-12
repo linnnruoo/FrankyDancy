@@ -10,6 +10,7 @@ export type User = {
 
 export type Dancer = {
   userId: string
+  beetleId: string
   dancerNo: Number
 }
 

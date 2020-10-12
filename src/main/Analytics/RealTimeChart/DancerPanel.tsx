@@ -11,6 +11,8 @@ import { MINT, PUMPKIN, VIOLET } from 'common/colors'
 
 type Props = CombinedProps<typeof mapStateToProps, {}>
 
+const legendColors = [MINT, VIOLET, PUMPKIN]
+
 const DancerPanel: React.FC<Props> = ({ dancerProfilesByDancerNo }) => {
   // retriece dancer info from datasets
   // map dancerNo -> fix color
@@ -20,18 +22,17 @@ const DancerPanel: React.FC<Props> = ({ dancerProfilesByDancerNo }) => {
 
   return (
     <PanelContainer vertical gutter={Gutter.MINI}>
-      <Stack gutter={Gutter.MINI} alignItems="center">
-        <Legend color={MINT} />
-        <Text>{_.get(dancerProfilesByDancerNo[1], 'name', '')}</Text>
-      </Stack>
-      <Stack gutter={Gutter.MINI} alignItems="center">
-        <Legend color={VIOLET} />
-        <Text>{_.get(dancerProfilesByDancerNo[2], 'name', '')}</Text>
-      </Stack>
-      <Stack gutter={Gutter.MINI} alignItems="center">
-        <Legend color={PUMPKIN} />
-        <Text>{_.get(dancerProfilesByDancerNo[3], 'name', '')}</Text>
-      </Stack>
+      {_.map(_.range(3), (i) => {
+        if (!dancerProfilesByDancerNo[i + 1]) {
+          return
+        }
+        return (
+          <Stack gutter={Gutter.MINI} alignItems="center">
+            <Legend color={legendColors[i]} />
+            <Text>{_.get(dancerProfilesByDancerNo[i + 1], 'name', '')}</Text>
+          </Stack>
+        )
+      })}
     </PanelContainer>
   )
 }
