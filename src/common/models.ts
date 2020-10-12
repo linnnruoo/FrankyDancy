@@ -29,13 +29,7 @@ export type Movement = {
   _id: string
   move: Move
   position: number[] // e.g [1,2,3]
-  date: Date
-}
-
-export type PredictedMovement = {
-  _id: string
-  move: Move
-  position: number[] // e.g [1,2,3]
+  correctPosition: number[]
   syncDelay: number
   date: Date
 }

@@ -9,7 +9,7 @@ import { RootState } from 'store/rootReducer'
 
 import socket from 'configs/socket'
 import * as events from 'common/events'
-import { PredictedMovement } from 'common/models'
+import { Movement } from 'common/models'
 import Move from 'common/moves'
 import { endDanceSession } from 'store/dance/actions'
 import Navbar from 'components/Navbar'
@@ -32,14 +32,11 @@ const Analytics: React.FC<Props> = ({ endDanceSession }) => {
   const [currMove, setMove] = React.useState<Move>()
 
   const fetchCurrentMovement = () => {
-    socket.on(
-      events.MOVEMENT_INSERTION_EVENT,
-      (newMovement: PredictedMovement) => {
-        const { move, position } = newMovement
-        setPosition(position)
-        setMove(move)
-      },
-    )
+    socket.on(events.MOVEMENT_INSERTION_EVENT, (newMovement: Movement) => {
+      const { move, position } = newMovement
+      setPosition(position)
+      setMove(move)
+    })
     return () => {
       socket.emit('disconnect')
       socket.disconnect()
