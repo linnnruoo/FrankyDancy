@@ -23,7 +23,7 @@ const chartOptions = {
   },
 }
 
-const CurrentPositions: React.FC<{}> = () => {
+const CurrentPositionsHitPanel: React.FC<{}> = () => {
   const [chartData, setChartData] = React.useState({
     labels: ['User 1', 'User 2', 'User 3'],
     datasets: [
@@ -50,4 +50,4 @@ const CurrentPositions: React.FC<{}> = () => {
   )
 }
 
-export default CurrentPositions
+export default CurrentPositionsHitPanel

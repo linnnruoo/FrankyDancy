@@ -16,10 +16,10 @@ import Navbar from 'components/Navbar'
 import SidePanel from 'components/SidePanel'
 import Stack, { Gutter } from 'components/Stack'
 
-import RealTimeChart from './RealTimeChart'
 import CurrentMove from './CurrentMove'
 import CurrentPosition from './CurrentPosition'
-import CorrectPositions from './CorrectPositions'
+import RealTimeChart from './RealTimeChart'
+import CorrectPositions from './CurrentPositionsHitPanel'
 import TotalMovesPanel from './TotalMovesPanel'
 
 type Props = CombinedProps<typeof mapStateToProps, typeof mapDispatchToProps>
@@ -33,7 +33,7 @@ const Analytics: React.FC<Props> = ({ endDanceSession }) => {
 
   const fetchCurrentMovement = () => {
     socket.on(
-      events.PREDICTED_MOVEMENT_INSERTION_EVENT,
+      events.MOVEMENT_INSERTION_EVENT,
       (newMovement: PredictedMovement) => {
         const { move, position } = newMovement
         setPosition(position)
