@@ -4,21 +4,32 @@ import Card from 'components/Card'
 import Stack, { Gutter } from 'components/Stack'
 import { Text, Title } from 'components/Typography'
 import Move, { getMoveName, getMoveUrl } from 'common/moves'
+import { Movement } from 'common/models'
+import * as events from 'common/events'
+import socket from 'configs/socket'
 
-interface Props {
-  move?: Move
-}
+const CurrentMove: React.FC<{}> = () => {
+  const [currMove, setMove] = React.useState<Move>()
 
-const CurrentMove: React.FC<Props> = ({ move }) => {
-  /**
-   * @todo: map move number to moves png
-   */
+  const fetchCurrentMovement = () => {
+    socket.on(events.MOVEMENT_INSERTION_EVENT, (newMovement: Movement) => {
+      setMove(newMovement.move)
+    })
+    return () => {
+      socket.emit('disconnect')
+      socket.disconnect()
+      socket.close()
+    }
+  }
+
+  React.useEffect(fetchCurrentMovement, [])
+
   const renderMove = () => {
-    if (move) {
+    if (currMove) {
       return (
         <>
-          <img width="80%" src={getMoveUrl(move)} alt="test" />
-          <Text>{getMoveName(move)}</Text>
+          <img width="80%" src={getMoveUrl(currMove)} alt="test" />
+          <Text>{getMoveName(currMove)}</Text>
         </>
       )
     }

@@ -26,6 +26,7 @@ const chartOptions = {
       {
         ticks: {
           autoSkip: true,
+          display: false,
         },
         gridlines: {
           display: false,
@@ -68,14 +69,14 @@ const Chart: React.FC<Props> = ({ toReset, setReset }) => {
         data: [] as number[],
         borderColor: MINT,
       },
-      {
-        type: 'line',
-        label: 'User 2',
-        lineTension: 0.5,
-        fill: false,
-        data: [] as number[],
-        borderColor: VIOLET,
-      },
+      // {
+      //   type: 'line',
+      //   label: 'User 2',
+      //   lineTension: 0.5,
+      //   fill: false,
+      //   data: [] as number[],
+      //   borderColor: VIOLET,
+      // },
     ],
   })
 
@@ -109,7 +110,7 @@ const Chart: React.FC<Props> = ({ toReset, setReset }) => {
         ...chartData,
         datasets: [
           { ...oldDataset, data: sensorData },
-          { ...oldDummy, data: dummyData },
+          // { ...oldDummy, data: dummyData },
         ],
         labels: sensorLabels,
       }
@@ -117,7 +118,6 @@ const Chart: React.FC<Props> = ({ toReset, setReset }) => {
     }, 30)
 
     return () => {
-      console.log('cleared')
       socket.emit('disconnect')
       socket.disconnect()
       socket.close()
@@ -141,7 +141,7 @@ const Chart: React.FC<Props> = ({ toReset, setReset }) => {
   React.useEffect(resetSensorData, [toReset])
 
   return (
-    <Stack style={{ width: '100%', height: 'auto', padding: '40px 40px 30px' }}>
+    <Stack vertical style={{ width: '100%', height: 'auto', padding: '40px 40px 30px' }}>
       <ChartContainer>
         <Line data={chartData} options={chartOptions} />
       </ChartContainer>

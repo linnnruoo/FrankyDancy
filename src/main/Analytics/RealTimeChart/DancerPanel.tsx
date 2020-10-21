@@ -27,7 +27,7 @@ const DancerPanel: React.FC<Props> = ({ dancerProfilesByDancerNo }) => {
           return
         }
         return (
-          <Stack gutter={Gutter.MINI} alignItems="center">
+          <Stack key={i} gutter={Gutter.MINI} alignItems="center">
             <Legend color={legendColors[i]} />
             <Text>{_.get(dancerProfilesByDancerNo[i + 1], 'name', '')}</Text>
           </Stack>
