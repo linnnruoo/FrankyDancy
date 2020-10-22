@@ -7,11 +7,11 @@ import { bindActionCreators, Dispatch } from 'redux'
 import { connect } from 'react-redux'
 import { RootState } from 'store/rootReducer'
 
-import socket from 'configs/socket'
-import * as events from 'common/events'
-import { Movement } from 'common/models'
-import Move from 'common/moves'
 import { endDanceSession } from 'store/dance/actions'
+import {
+  groupActiveDancerProfilesByDancerNo,
+  mapDancerNamesToPositions,
+} from 'store/dance/selector'
 import Navbar from 'components/Navbar'
 import SidePanel from 'components/SidePanel'
 import Stack, { Gutter } from 'components/Stack'
@@ -24,28 +24,13 @@ import TotalMovesPanel from './TotalMovesPanel'
 
 type Props = CombinedProps<typeof mapStateToProps, typeof mapDispatchToProps>
 
-const Analytics: React.FC<Props> = ({ endDanceSession }) => {
+const Analytics: React.FC<Props> = ({
+  dancerProfiles,
+  dancerNames,
+  endDanceSession,
+}) => {
   // reset sensor data
   const [toReset, setReset] = React.useState(false)
-
-  const [currPosition, setPosition] = React.useState([0, 0, 0])
-  const [currMove, setMove] = React.useState<Move>()
-
-  const fetchCurrentMovement = () => {
-    socket.on(events.MOVEMENT_INSERTION_EVENT, (newMovement: Movement) => {
-      const { move, position } = newMovement
-      setPosition(position)
-      setMove(move)
-    })
-    return () => {
-      socket.emit('disconnect')
-      socket.disconnect()
-      socket.close()
-    }
-  }
-
-  React.useEffect(fetchCurrentMovement, [])
-
   return (
     <Layout style={{ height: '100vh' }}>
       <Navbar setReset={setReset} endDanceSession={endDanceSession} />
@@ -54,13 +39,13 @@ const Analytics: React.FC<Props> = ({ endDanceSession }) => {
         <Layout style={{ padding: '24px 24px 24px' }}>
           <Stack gutter={Gutter.SMALL} vertical>
             <Stack gutter={Gutter.SMALL}>
-              <CurrentPosition position={currPosition} />
-              <CurrentMove move={currMove} />
+              <CurrentPosition dancerProfiles={dancerProfiles} />
+              <CurrentMove />
             </Stack>
             <RealTimeChart toReset={toReset} setReset={setReset} />
             <Stack gutter={Gutter.SMALL}>
-              <CorrectPositions />
-              <TotalMovesPanel currMove={currMove} />
+              <CorrectPositions dancerNames={dancerNames} />
+              <TotalMovesPanel />
             </Stack>
           </Stack>
         </Layout>
@@ -69,7 +54,10 @@ const Analytics: React.FC<Props> = ({ endDanceSession }) => {
   )
 }
 
-const mapStateToProps = (s: RootState) => ({})
+const mapStateToProps = (s: RootState) => ({
+  dancerProfiles: groupActiveDancerProfilesByDancerNo(s),
+  dancerNames: mapDancerNamesToPositions(s),
+})
 
 const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(

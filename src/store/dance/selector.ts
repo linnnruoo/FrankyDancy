@@ -42,6 +42,21 @@ export const groupActiveDancerProfilesByDancerNo = createSelector(
   },
 )
 
+export const mapDancerNamesToPositions = createSelector(
+  // hardcode the 3 dancers
+  [groupActiveDancerProfilesByDancerNo],
+  (dancerProfiles) => {
+    const names = _.map(_.range(_.size(dancerProfiles)), (index) => {
+      // dancer no starts from 1 🤪
+      if (dancerProfiles[index + 1]) {
+        return dancerProfiles[index + 1].name
+      }
+      return ''
+    })
+    return names
+  },
+)
+
 export const groupActiveDancersByUserId = createSelector(
   [getActiveDancers],
   (dancers) => _.keyBy(dancers, 'userId'),
