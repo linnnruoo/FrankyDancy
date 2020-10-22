@@ -46,5 +46,5 @@ export type Sensor = {
   dancerNo: number
   accelerometer: SensorReading
   gyroscope: SensorReading
-  date: Date
+  date: string
 }

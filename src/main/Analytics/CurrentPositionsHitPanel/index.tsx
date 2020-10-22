@@ -33,6 +33,9 @@ const chartOptions = {
       },
     ],
   },
+  tooltips: {
+    enabled: false,
+  },
 }
 
 interface Props {

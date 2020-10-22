@@ -8,15 +8,12 @@ import { Line } from 'react-chartjs-2'
 import styled from 'styled-components'
 
 import socket from 'configs/socket'
-import { getMinSec } from 'utilities/datetime'
 import * as events from 'common/events'
 import Stack from 'components/Stack'
 import { Sensor } from 'common/models'
-import { MINT, VIOLET } from 'common/colors'
+import { MINT, PUMPKIN, VIOLET } from 'common/colors'
 
-let sensorData: number[] = []
-let dummyData: number[] = []
-let sensorLabels: string[] = []
+let dancersData: Array<Array<{ x: string; y: number }>> = [[], [], []] // lol
 
 const chartOptions = {
   responsive: true,
@@ -24,6 +21,7 @@ const chartOptions = {
   scales: {
     xAxes: [
       {
+        type: 'time',
         ticks: {
           autoSkip: true,
           display: false,
@@ -47,6 +45,9 @@ const chartOptions = {
   legend: {
     display: false,
   },
+  tooltips: {
+    enabled: false,
+  },
 }
 
 interface Props {
@@ -55,66 +56,62 @@ interface Props {
 }
 
 const Chart: React.FC<Props> = ({ toReset, setReset }) => {
-  const now = moment(new Date())
+  const getChartData = () => {
+    return {
+      // labels: sensorLabels,
+      type: 'line',
+      datasets: [
+        {
+          label: '1',
+          lineTension: 0.5,
+          fill: false,
+          data: dancersData[0],
+          borderColor: MINT,
+        },
+        {
+          label: '2',
+          lineTension: 0.5,
+          fill: false,
+          data: dancersData[1],
+          borderColor: VIOLET,
+        },
+        {
+          label: '3',
+          lineTension: 0.5,
+          fill: false,
+          data: dancersData[2],
+          borderColor: PUMPKIN,
+        },
+      ],
+    }
+  }
 
   // Hardcode 3 datasets input
-  const [chartData, setChartData] = React.useState({
-    labels: [] as string[],
-    datasets: [
-      {
-        type: 'line',
-        label: 'User 1',
-        lineTension: 0.5,
-        fill: false,
-        data: [] as number[],
-        borderColor: MINT,
-      },
-      // {
-      //   type: 'line',
-      //   label: 'User 2',
-      //   lineTension: 0.5,
-      //   fill: false,
-      //   data: [] as number[],
-      //   borderColor: VIOLET,
-      // },
-    ],
-  })
+  const [chartData, setChartData] = React.useState(getChartData())
 
   const fetchSensorData = () => {
     socket.on(events.SENSOR_INSERTION_EVENT, (sensor: Sensor) => {
       const value = sensor.accelerometer.x
-      const label = getMinSec(moment(sensor.date), now)
+      // pipe different sensor data into the corresponding pos
+      const indexPos = sensor.dancerNo - 1
 
-      // manage data
-      sensorData = [...sensorData, value]
-      // TODO: delete dummy data
-      dummyData = [...dummyData, value + 0.1]
-      if (sensorData.length >= 50) {
-        sensorData.shift()
-        dummyData.shift()
-      }
+      dancersData[indexPos] = [
+        ...dancersData[indexPos],
+        { x: sensor.date, y: value },
+      ]
 
-      // manage labels
-      sensorLabels = [...sensorLabels, label]
-      if (sensorLabels.length >= 50) {
-        sensorLabels.shift()
+      // TODO find the dancer that has max length
+      // if that dancer is the current dancer, shift
+
+      if (dancersData[indexPos].length >= 50) {
+        dancersData[indexPos].shift()
       }
     })
 
     // set new label and data
     const interval = setInterval(() => {
-      const oldDataset = chartData.datasets[0]
-      // TODO delete dummy
-      const oldDummy = chartData.datasets[1]
-      const newChartData = {
-        ...chartData,
-        datasets: [
-          { ...oldDataset, data: sensorData },
-          // { ...oldDummy, data: dummyData },
-        ],
-        labels: sensorLabels,
-      }
-      setChartData(newChartData)
+      // pip different sensor data into the corresponding dancer pos
+      setChartData(getChartData())
     }, 30)
 
     return () => {
@@ -130,10 +127,7 @@ const Chart: React.FC<Props> = ({ toReset, setReset }) => {
   // To clear all the existing sensor datadata stored
   const resetSensorData = () => {
     if (toReset) {
-      sensorData = []
-      // TODO delete dummy
-      dummyData = []
-      sensorLabels = []
+      dancersData = [[], [], []]
       setReset(false)
     }
   }
@@ -141,7 +135,10 @@ const Chart: React.FC<Props> = ({ toReset, setReset }) => {
   React.useEffect(resetSensorData, [toReset])
 
   return (
-    <Stack vertical style={{ width: '100%', height: 'auto', padding: '40px 40px 30px' }}>
+    <Stack
+      vertical
+      style={{ width: '100%', height: 'auto', padding: '40px 40px 30px' }}
+    >
       <ChartContainer>
         <Line data={chartData} options={chartOptions} />
       </ChartContainer>
