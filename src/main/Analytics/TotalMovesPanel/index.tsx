@@ -6,6 +6,9 @@ import Stack, { Gutter } from 'components/Stack'
 import { Text, Title } from 'components/Typography'
 import Move, { getMoveKeys, MoveName } from 'common/moves'
 import ProgressBar from 'components/ProgressBar'
+import { Movement } from 'common/models'
+import socket from 'configs/socket'
+import * as events from 'common/events'
 
 const moveKeys = getMoveKeys()
 
@@ -20,14 +23,33 @@ const getInitialMovesCounts = () =>
   )
 
 let tempMoveCounts = getInitialMovesCounts()
+let tempMaxCount = 0
 
-interface Props {
-  currMove?: Move
-}
-
-const TotalMovesPanel: React.FC<Props> = ({ currMove }) => {
+const TotalMovesPanel: React.FC = () => {
   const [moveCounts, setMoveCounts] = React.useState(tempMoveCounts)
-  const [maxCount, setMaxCount] = React.useState(0)
+  const [maxCount, setMaxCount] = React.useState(tempMaxCount)
+
+  const fetchCurrentMovement = () => {
+    socket.on(events.MOVEMENT_INSERTION_EVENT, (newMovement: Movement) => {
+      const moveKey = Move[newMovement.move]
+
+      tempMoveCounts[moveKey] = tempMoveCounts[moveKey] + 1
+      tempMaxCount = Math.max(tempMoveCounts[moveKey], tempMaxCount)
+      setMoveCounts({
+        ...moveCounts,
+        [moveKey]: tempMoveCounts[moveKey],
+      })
+      setMaxCount(tempMaxCount)
+    })
+
+    return () => {
+      socket.emit('disconnect')
+      socket.disconnect()
+      socket.close()
+    }
+  }
+
+  React.useEffect(fetchCurrentMovement, [])
 
   const getPercentage = (count: number) => {
     if (maxCount === 0) {
@@ -35,20 +57,6 @@ const TotalMovesPanel: React.FC<Props> = ({ currMove }) => {
     }
     return Math.round((count / maxCount) * 100)
   }
-
-  const updateMoveCounts = () => {
-    if (!currMove) {
-      return
-    }
-    const moveKey = Move[currMove]
-    tempMoveCounts[moveKey] = tempMoveCounts[moveKey] + 1
-    setMoveCounts(tempMoveCounts)
-    if (tempMoveCounts[moveKey] > maxCount) {
-      setMaxCount(tempMoveCounts[moveKey])
-    }
-  }
-
-  React.useEffect(updateMoveCounts, [currMove])
 
   return (
     <Card width="70%">
@@ -59,7 +67,7 @@ const TotalMovesPanel: React.FC<Props> = ({ currMove }) => {
             {_.map(moveKeys.slice(0, 4), (moveKey: Move) => {
               const moveName = MoveName[moveKey]
               return (
-                <Stack vertical>
+                <Stack key={moveKey} vertical>
                   <Text>{moveName}</Text>
                   <ProgressBar
                     percent={getPercentage(moveCounts[moveKey])}
@@ -73,7 +81,7 @@ const TotalMovesPanel: React.FC<Props> = ({ currMove }) => {
             {_.map(moveKeys.slice(4, 8), (moveKey: Move) => {
               const moveName = MoveName[moveKey]
               return (
-                <Stack vertical>
+                <Stack key={moveKey} vertical>
                   <Text>{moveName}</Text>
                   <ProgressBar
                     percent={getPercentage(moveCounts[moveKey])}

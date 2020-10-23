@@ -12,6 +12,7 @@ import socket from 'configs/socket'
 import * as events from 'common/events'
 
 let tempPositionData: number[] = [0, 0, 0]
+let tempLabels: string[] = []
 
 const chartOptions = {
   responsive: true,
@@ -20,11 +21,11 @@ const chartOptions = {
     display: false,
   },
   scales: {
-    xAxes: [
-      {
-        display: false,
-      },
-    ],
+    // xAxes: [
+    //   {
+    //     display: false,
+    //   },
+    // ],
     yAxes: [
       {
         ticks: {
@@ -52,7 +53,7 @@ const CorrectPositionsHitPanel: React.FC<Props> = ({ dancerNames }) => {
 
   const getChartData = () => {
     return {
-      labels: ['1', '2', '3'],
+      labels: tempLabels,
       datasets: [
         {
           borderWidth: 2,
@@ -96,6 +97,14 @@ const CorrectPositionsHitPanel: React.FC<Props> = ({ dancerNames }) => {
 
   React.useEffect(fetchCurrentMovement, [])
 
+  const updateChartLabels = () => {
+    tempLabels = dancerNames
+    setChartData(getChartData())
+    chartRef.chartInstance.update()
+  }
+
+  React.useEffect(updateChartLabels, [dancerNames])
+
   return (
     <Card width="30%">
       <Stack vertical gutter={Gutter.SMALL}>
@@ -111,7 +120,6 @@ const CorrectPositionsHitPanel: React.FC<Props> = ({ dancerNames }) => {
             }}
           />
         </ChartContainer>
-        {/** TODO: CREATE AN OVERLAY FOR THE USERS */}
       </Stack>
     </Card>
   )
