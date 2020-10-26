@@ -25,6 +25,7 @@ const chartOptions = {
       {
         ticks: {
           beginAtZero: true,
+          stepSize: 1,
         },
       },
     ],
