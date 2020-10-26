@@ -21,11 +21,6 @@ const chartOptions = {
     display: false,
   },
   scales: {
-    // xAxes: [
-    //   {
-    //     display: false,
-    //   },
-    // ],
     yAxes: [
       {
         ticks: {
