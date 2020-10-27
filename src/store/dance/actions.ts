@@ -2,7 +2,7 @@ import { createAsyncAction } from 'typesafe-actions'
 import { Dispatch } from 'redux'
 import _ from 'lodash'
 
-import { Dance, Dancer } from 'common/models'
+import { Dance, Dancer, WrongPosition } from 'common/models'
 import axiosInstance from 'configs/api'
 
 export const fetchActiveDanceSessionAction = createAsyncAction(
@@ -22,6 +22,12 @@ export const startNewDanceSessionAction = createAsyncAction(
   'Start_New_Dance_Session__Success',
   'Start_New_Dance_Session__Failure',
 )<void, Dance, Error>()
+
+export const storeWrongPositionsAction = createAsyncAction(
+  'Store_Wrong_Positions__Request',
+  'Store_Wrong_Positions__Success',
+  'Store_Wrong_Positions__Failure',
+)<void, WrongPosition, Error>()
 
 export const fetchActiveDanceSession = () => (dispatch: Dispatch) => {
   dispatch(fetchActiveDanceSessionAction.request())
@@ -53,4 +59,14 @@ export const startDanceSession = (newDancers: Dancer[]) => (
       dispatch(startNewDanceSessionAction.success(dance))
     })
     .catch((err) => dispatch(startNewDanceSessionAction.failure(err)))
+}
+
+export const storeWrongPositions = (wrongPos: WrongPosition) => (
+  dispatch: Dispatch,
+) => {
+  try {
+    dispatch(storeWrongPositionsAction.success(wrongPos))
+  } catch (err) {
+    dispatch(storeWrongPositionsAction.failure(err))
+  }
 }

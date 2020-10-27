@@ -8,10 +8,7 @@ import { connect } from 'react-redux'
 import { RootState } from 'store/rootReducer'
 
 import { endDanceSession } from 'store/dance/actions'
-import {
-  groupActiveDancerProfilesByDancerNo,
-  mapDancerNamesToPositions,
-} from 'store/dance/selector'
+import { groupActiveDancerProfilesByDancerNo } from 'store/dance/selector'
 import Navbar from 'components/Navbar'
 import SidePanel from 'components/SidePanel'
 import Stack, { Gutter } from 'components/Stack'
@@ -24,11 +21,7 @@ import TotalMovesPanel from './TotalMovesPanel'
 
 type Props = CombinedProps<typeof mapStateToProps, typeof mapDispatchToProps>
 
-const Analytics: React.FC<Props> = ({
-  dancerProfiles,
-  dancerNames,
-  endDanceSession,
-}) => {
+const Analytics: React.FC<Props> = ({ dancerProfiles, endDanceSession }) => {
   // reset sensor data
   const [toReset, setReset] = React.useState(false)
   return (
@@ -44,7 +37,7 @@ const Analytics: React.FC<Props> = ({
             </Stack>
             <RealTimeChart toReset={toReset} setReset={setReset} />
             <Stack gutter={Gutter.SMALL}>
-              <CorrectPositions dancerNames={dancerNames} />
+              <CorrectPositions />
               <TotalMovesPanel />
             </Stack>
           </Stack>
@@ -56,7 +49,6 @@ const Analytics: React.FC<Props> = ({
 
 const mapStateToProps = (s: RootState) => ({
   dancerProfiles: groupActiveDancerProfilesByDancerNo(s),
-  dancerNames: mapDancerNamesToPositions(s),
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) =>

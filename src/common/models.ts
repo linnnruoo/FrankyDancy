@@ -48,3 +48,10 @@ export type Sensor = {
   gyroscope: SensorReading
   date: string
 }
+
+export type WrongPosition = {
+  position: number[] // e.g [1,2,3]
+  correctPosition: number[]
+  syncDelay: number
+  time: string
+}

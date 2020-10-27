@@ -10,9 +10,19 @@ import { MINT, PUMPKIN, VIOLET } from 'common/colors'
 import { Movement } from 'common/models'
 import socket from 'configs/socket'
 import * as events from 'common/events'
+import { connect } from 'react-redux'
+import { bindActionCreators, Dispatch } from 'redux'
+import { storeWrongPositions } from 'store/dance/actions'
+import { RootState } from 'store/rootReducer'
+import { mapDancerNamesToPositions } from 'store/dance/selector'
+import { getMinuteSecondString } from 'utilities/datetime'
 
 let tempPositionData: number[] = [0, 0, 0]
 let tempLabels: string[] = []
+
+// to keep track of the wrong positions made
+let firstMovementReceived: boolean = false // indicate if the first move received
+let startTime: Date
 
 const chartOptions = {
   responsive: true,
@@ -35,16 +45,17 @@ const chartOptions = {
   },
 }
 
-interface Props {
-  dancerNames: string[]
-}
+type Props = CombinedProps<typeof mapStateToProps, typeof mapDispatchToProps>
 
 /**
  * Unable to update the chart data with the dancer names loaded
  * as the socket instance is called upon component mounted to the page
  * the original chart data instance is then taken
  */
-const CorrectPositionsHitPanel: React.FC<Props> = ({ dancerNames }) => {
+const CorrectPositionsHitPanel: React.FC<Props> = ({
+  dancerNames,
+  storeWrongPositions,
+}) => {
   let chartRef: Bar
 
   const getChartData = () => {
@@ -65,12 +76,27 @@ const CorrectPositionsHitPanel: React.FC<Props> = ({ dancerNames }) => {
 
   const fetchCurrentMovement = () => {
     socket.on(events.MOVEMENT_INSERTION_EVENT, (newMovement: Movement) => {
+      // indicate if the first move received
+      if (!firstMovementReceived) {
+        startTime = new Date(newMovement.date)
+        firstMovementReceived = true
+      }
+
       // update positions
       const predictedPosition = newMovement.position
       const correctPosition = newMovement.correctPosition
       if (predictedPosition !== correctPosition) {
         // call an action to store the wrong positions for the sider panel
+        const wrongPosition = {
+          position: predictedPosition,
+          correctPosition,
+          syncDelay: newMovement.syncDelay,
+          time: getMinuteSecondString(new Date(newMovement.date), startTime), //todo minus off the start time based on the first signal move
+        }
+        storeWrongPositions(wrongPosition)
       }
+
+      // check individual wrong positions
       _.map(predictedPosition, (pos, i) => {
         if (pos === correctPosition[i]) {
           tempPositionData[i] += 1
@@ -128,4 +154,20 @@ const ChartContainer = styled(Stack)`
     height: 200px !important;
   }
 `
-export default CorrectPositionsHitPanel
+
+const mapStateToProps = (s: RootState) => ({
+  dancerNames: mapDancerNamesToPositions(s),
+})
+
+const mapDispatchToProps = (dispatch: Dispatch) =>
+  bindActionCreators(
+    {
+      storeWrongPositions: storeWrongPositions,
+    },
+    dispatch,
+  )
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CorrectPositionsHitPanel)

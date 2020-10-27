@@ -6,7 +6,7 @@ const { Sider } = Layout
 
 const SidePanel: React.FC = () => {
   return (
-    <Sider theme="light" width={400}>
+    <Sider style={{ background: '#f6f8ff' }} width={400}>
       <Stack></Stack>
     </Sider>
   )
