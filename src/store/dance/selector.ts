@@ -12,6 +12,11 @@ export const getActiveDanceSession = createSelector(
   (s) => s.active,
 )
 
+export const getWrongPositionsCollection = createSelector(
+  danceSelector,
+  (s) => s.wrongPositions,
+)
+
 export const getActiveDancers = createSelector(
   [getActiveDanceSession],
   (danceSession) => _.get(danceSession, ['dancers'], []),

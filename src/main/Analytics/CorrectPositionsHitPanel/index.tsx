@@ -85,7 +85,7 @@ const CorrectPositionsHitPanel: React.FC<Props> = ({
       // update positions
       const predictedPosition = newMovement.position
       const correctPosition = newMovement.correctPosition
-      if (predictedPosition !== correctPosition) {
+      if (!_.isEqual(predictedPosition, correctPosition)) {
         // call an action to store the wrong positions for the sider panel
         const wrongPosition = {
           position: predictedPosition,

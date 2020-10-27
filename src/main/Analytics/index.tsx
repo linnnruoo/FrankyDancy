@@ -28,7 +28,7 @@ const Analytics: React.FC<Props> = ({ dancerProfiles, endDanceSession }) => {
     <Layout style={{ height: '100vh' }}>
       <Navbar setReset={setReset} endDanceSession={endDanceSession} />
       <Layout>
-        <SidePanel />
+        <SidePanel dancerProfiles={dancerProfiles} />
         <Layout style={{ padding: '24px 24px 24px' }}>
           <Stack gutter={Gutter.SMALL} vertical>
             <Stack gutter={Gutter.SMALL}>
