@@ -1,6 +1,3 @@
-/**
- * @todo: layout
- */
 import React from 'react'
 import { Layout } from 'antd'
 import { bindActionCreators, Dispatch } from 'redux'
@@ -16,8 +13,8 @@ import Stack, { Gutter } from 'components/Stack'
 import CurrentMove from './CurrentMove'
 import CurrentPosition from './CurrentPosition'
 import RealTimeChart from './RealTimeChart'
-import CorrectPositions from './CorrectPositionsHitPanel'
-import TotalMovesPanel from './TotalMovesPanel'
+// import CorrectPositions from './CorrectPositionsHitPanel'
+// import TotalMovesPanel from './TotalMovesPanel'
 
 type Props = CombinedProps<typeof mapStateToProps, typeof mapDispatchToProps>
 
@@ -33,13 +30,13 @@ const Analytics: React.FC<Props> = ({ dancerProfiles, endDanceSession }) => {
           <Stack gutter={Gutter.SMALL} vertical>
             <Stack gutter={Gutter.SMALL}>
               <CurrentPosition dancerProfiles={dancerProfiles} />
-              <CurrentMove />
+              <CurrentMove dancerProfiles={dancerProfiles} />
             </Stack>
             <RealTimeChart toReset={toReset} setReset={setReset} />
-            <Stack gutter={Gutter.SMALL}>
+            {/* <Stack gutter={Gutter.SMALL}>
               <CorrectPositions />
               <TotalMovesPanel />
-            </Stack>
+            </Stack> */}
           </Stack>
         </Layout>
       </Layout>

@@ -32,8 +32,9 @@ const CurrentPosition: React.FC<Props> = ({ dancerProfiles }) => {
   React.useEffect(fetchCurrentMovement, [])
 
   const getDancerProfile = (index: number) => dancerProfiles[index]
+
   return (
-    <Card width="60%">
+    <Card width="55%">
       <Stack vertical gutter={Gutter.AVERAGE}>
         <Title>Current Position</Title>
         <Stack gutter={Gutter.SMALL} center>

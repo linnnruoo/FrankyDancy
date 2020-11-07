@@ -30,17 +30,17 @@ const TotalMovesPanel: React.FC = () => {
   const [maxCount, setMaxCount] = React.useState(tempMaxCount)
 
   const fetchCurrentMovement = () => {
-    socket.on(events.MOVEMENT_INSERTION_EVENT, (newMovement: Movement) => {
-      const moveKey = Move[newMovement.move]
+    // socket.on(events.MOVEMENT_INSERTION_EVENT, (newMovement: Movement) => {
+    //   const moveKey = Move[newMovement.move]
 
-      tempMoveCounts[moveKey] = tempMoveCounts[moveKey] + 1
-      tempMaxCount = Math.max(tempMoveCounts[moveKey], tempMaxCount)
-      setMoveCounts({
-        ...moveCounts,
-        [moveKey]: tempMoveCounts[moveKey],
-      })
-      setMaxCount(tempMaxCount)
-    })
+    //   tempMoveCounts[moveKey] = tempMoveCounts[moveKey] + 1
+    //   tempMaxCount = Math.max(tempMoveCounts[moveKey], tempMaxCount)
+    //   setMoveCounts({
+    //     ...moveCounts,
+    //     [moveKey]: tempMoveCounts[moveKey],
+    //   })
+    //   setMaxCount(tempMaxCount)
+    // })
 
     return () => {
       socket.emit('disconnect')

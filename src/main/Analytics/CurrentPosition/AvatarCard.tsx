@@ -4,6 +4,7 @@ import Stack, { Gutter } from 'components/Stack'
 import Avatar from 'components/Avatar'
 import { Text } from 'components/Typography'
 import { DancerProfile } from 'common/models'
+import { Spin } from 'antd'
 
 interface Props {
   dancerProfile?: DancerProfile
@@ -30,7 +31,7 @@ const AvatarCard: React.FC<Props> = ({ dancerProfile }) => {
           alt="placeholder"
           width={'80%'}
         />
-        <Text>Loading...</Text>
+        <Spin />
       </>
     )
   }
