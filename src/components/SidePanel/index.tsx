@@ -1,6 +1,7 @@
 import React from 'react'
 import { Layout } from 'antd'
 import { connect } from 'react-redux'
+import _ from 'lodash'
 
 import { RootState } from 'store/rootReducer'
 import { getWrongPositionsCollection } from 'store/dance/selector'
@@ -21,18 +22,22 @@ interface OwnProps {
 
 const SidePanel: React.FC<Props> = ({ dancerProfiles, wrongPositions }) => {
   const renderPositionGroup = (positions: number[]) => {
-    return positions.map((dancerNo) => (
+    return _.map(positions, (dancerNo) => (
       <Avatar
         width={48}
-        src={dancerProfiles[dancerNo].url}
-        alt={dancerProfiles[dancerNo].name}
+        src={_.get(
+          dancerProfiles,
+          [dancerNo, 'url'],
+          'https://i.imgur.com/3MvrSRQ.jpg',
+        )}
+        alt={_.get(dancerProfiles, [dancerNo, 'name'], 'placeholder')}
       />
     ))
   }
   return (
     <Sider style={{ background: '#f6f8ff', overflowY: 'auto' }} width={400}>
       <Stack style={{ margin: 20 }} vertical gutter={Gutter.REGULAR}>
-        {wrongPositions.map((positionInfo) => {
+        {_.map(wrongPositions, (positionInfo) => {
           return (
             <Card>
               <Stack fillParentWidth vertical gutter={Gutter.SMALL}>

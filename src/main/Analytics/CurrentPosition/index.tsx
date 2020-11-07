@@ -18,7 +18,9 @@ const CurrentPosition: React.FC<Props> = ({ dancerProfiles }) => {
 
   const fetchCurrentMovement = () => {
     socket.on(events.MOVEMENT_INSERTION_EVENT, (newMovement: Movement) => {
-      setPosition(newMovement.position)
+      setPosition(
+        newMovement.position.split(' ').map((strNum) => parseInt(strNum)),
+      )
     })
     return () => {
       socket.emit('disconnect')

@@ -84,13 +84,19 @@ const CorrectPositionsHitPanel: React.FC<Props> = ({
 
       // update positions
       const predictedPosition = newMovement.position
+        .split(' ')
+        .map((strNum) => parseInt(strNum))
+
       const correctPosition = newMovement.correctPosition
+        .split(' ')
+        .map((strNum) => parseInt(strNum))
+
       if (!_.isEqual(predictedPosition, correctPosition)) {
         // call an action to store the wrong positions for the sider panel
         const wrongPosition = {
           position: predictedPosition,
           correctPosition,
-          syncDelay: newMovement.syncDelay,
+          syncDelay: parseInt(newMovement.syncDelay),
           time: getMinuteSecondString(new Date(newMovement.date), startTime), //todo minus off the start time based on the first signal move
         }
         storeWrongPositions(wrongPosition)

@@ -5,6 +5,7 @@
 import React from 'react'
 import { ChartData, Line } from 'react-chartjs-2'
 import styled from 'styled-components'
+import _ from 'lodash'
 
 import socket from 'configs/socket'
 import * as events from 'common/events'
@@ -122,14 +123,32 @@ const Chart: React.FC<Props> = ({
       const now = new Date()
 
       gyroData[indexPos] = {
-        x: [...gyroData[indexPos].x, { x: now, y: sensor.gyroscope.x }],
-        y: [...gyroData[indexPos].y, { x: now, y: sensor.gyroscope.y }],
-        z: [...gyroData[indexPos].z, { x: now, y: sensor.gyroscope.z }],
+        x: [
+          ...gyroData[indexPos].x,
+          { x: now, y: _.get(sensor, ['gyroscope', 'x'], 0) },
+        ],
+        y: [
+          ...gyroData[indexPos].y,
+          { x: now, y: _.get(sensor, ['gyroscope', 'y'], 0) },
+        ],
+        z: [
+          ...gyroData[indexPos].z,
+          { x: now, y: _.get(sensor, ['gyroscope', 'z'], 0) },
+        ],
       }
       acceleroData[indexPos] = {
-        x: [...acceleroData[indexPos].x, { x: now, y: sensor.accelerometer.x }],
-        y: [...acceleroData[indexPos].y, { x: now, y: sensor.accelerometer.y }],
-        z: [...acceleroData[indexPos].z, { x: now, y: sensor.accelerometer.z }],
+        x: [
+          ...acceleroData[indexPos].x,
+          { x: now, y: _.get(sensor, ['accelerometer', 'x'], 0) },
+        ],
+        y: [
+          ...acceleroData[indexPos].y,
+          { x: now, y: _.get(sensor, ['accelerometer', 'y'], 0) },
+        ],
+        z: [
+          ...acceleroData[indexPos].z,
+          { x: now, y: _.get(sensor, ['accelerometer', 'z'], 0) },
+        ],
       }
 
       if (gyroData[indexPos].x.length > 20) {

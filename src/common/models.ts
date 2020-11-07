@@ -28,10 +28,10 @@ export type Dance = {
 
 export type Movement = {
   _id: string
-  move: Move
-  position: number[] // e.g [1,2,3]
-  correctPosition: number[]
-  syncDelay: number
+  move: Move[]
+  position: string // e.g '1 2 3'
+  correctPosition: string // e.g '1 2 3'
+  syncDelay: string
   date: Date
 }
 
