@@ -23,7 +23,7 @@ export const startNewDanceSessionAction = createAsyncAction(
   'Start_New_Dance_Session__Failure',
 )<void, Dance, Error>()
 
-export const storeWrongPositionsAction = createAsyncAction(
+export const storeWrongMovementsInfoAction = createAsyncAction(
   'Store_Wrong_Positions__Request',
   'Store_Wrong_Positions__Success',
   'Store_Wrong_Positions__Failure',
@@ -61,12 +61,12 @@ export const startDanceSession = (newDancers: Dancer[]) => (
     .catch((err) => dispatch(startNewDanceSessionAction.failure(err)))
 }
 
-export const storeWrongPositions = (wrongPos: WrongPosition) => (
+export const storeWrongMovementsInfo = (wrongPos: WrongPosition) => (
   dispatch: Dispatch,
 ) => {
   try {
-    dispatch(storeWrongPositionsAction.success(wrongPos))
+    dispatch(storeWrongMovementsInfoAction.success(wrongPos))
   } catch (err) {
-    dispatch(storeWrongPositionsAction.failure(err))
+    dispatch(storeWrongMovementsInfoAction.failure(err))
   }
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Layout } from 'antd'
+import { Layout, Spin } from 'antd'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 
@@ -34,43 +34,61 @@ const SidePanel: React.FC<Props> = ({ dancerProfiles, wrongPositions }) => {
       />
     ))
   }
+
+  const renderWrongMovements = () => {
+    return _.map(wrongPositions, (positionInfo) => {
+      return (
+        <Card>
+          <Stack fillParentWidth vertical gutter={Gutter.SMALL}>
+            <Stack gutter={Gutter.SMALL}>
+              <Title>Time: {positionInfo.time} - </Title>
+              <Title color={RED}>Wrong Position</Title>
+            </Stack>
+            <Stack alignItems="center" justifyContent="space-around">
+              <Stack
+                justifyContent="center"
+                style={{ maxWidth: 100, minWidth: 100 }}
+              >
+                <Text>Expected:</Text>
+              </Stack>
+              <Stack center gutter={Gutter.EXTRA_SMALL}>
+                {renderPositionGroup(positionInfo.correctPosition)}
+              </Stack>
+            </Stack>
+            <Stack alignItems="center" justifyContent="space-around">
+              <Stack
+                justifyContent="center"
+                style={{ maxWidth: 100, minWidth: 100 }}
+              >
+                <Text>Actual:</Text>
+              </Stack>
+              <Stack center gutter={Gutter.EXTRA_SMALL}>
+                {renderPositionGroup(positionInfo.position)}
+              </Stack>
+            </Stack>
+          </Stack>
+        </Card>
+      )
+    })
+  }
+
+  const renderLoader = () => {
+    return (
+      <Stack fillParentHeight center>
+        <Spin size="large" />
+      </Stack>
+    )
+  }
+
   return (
     <Sider style={{ background: '#f6f8ff', overflowY: 'auto' }} width={400}>
-      <Stack style={{ margin: 20 }} vertical gutter={Gutter.REGULAR}>
-        {_.map(wrongPositions, (positionInfo) => {
-          return (
-            <Card>
-              <Stack fillParentWidth vertical gutter={Gutter.SMALL}>
-                <Stack gutter={Gutter.SMALL}>
-                  <Title>Time: {positionInfo.time} - </Title>
-                  <Title color={RED}>Wrong Position</Title>
-                </Stack>
-                <Stack alignItems="center" justifyContent="space-around">
-                  <Stack
-                    justifyContent="center"
-                    style={{ maxWidth: 100, minWidth: 100 }}
-                  >
-                    <Text>Expected:</Text>
-                  </Stack>
-                  <Stack center gutter={Gutter.EXTRA_SMALL}>
-                    {renderPositionGroup(positionInfo.correctPosition)}
-                  </Stack>
-                </Stack>
-                <Stack alignItems="center" justifyContent="space-around">
-                  <Stack
-                    justifyContent="center"
-                    style={{ maxWidth: 100, minWidth: 100 }}
-                  >
-                    <Text>Actual:</Text>
-                  </Stack>
-                  <Stack center gutter={Gutter.EXTRA_SMALL}>
-                    {renderPositionGroup(positionInfo.position)}
-                  </Stack>
-                </Stack>
-              </Stack>
-            </Card>
-          )
-        })}
+      <Stack
+        fillParentHeight
+        style={{ margin: 20 }}
+        vertical
+        gutter={Gutter.REGULAR}
+      >
+        {_.isEmpty(wrongPositions) ? renderLoader() : renderWrongMovements()}
       </Stack>
     </Sider>
   )

@@ -13,8 +13,6 @@ import Stack, { Gutter } from 'components/Stack'
 import CurrentMove from './CurrentMove'
 import CurrentPosition from './CurrentPosition'
 import RealTimeChart from './RealTimeChart'
-// import CorrectPositions from './CorrectPositionsHitPanel'
-// import TotalMovesPanel from './TotalMovesPanel'
 
 type Props = CombinedProps<typeof mapStateToProps, typeof mapDispatchToProps>
 

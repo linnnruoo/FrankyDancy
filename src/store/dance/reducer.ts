@@ -6,14 +6,14 @@ import {
   fetchActiveDanceSessionAction,
   endActiveDanceSessionAction,
   startNewDanceSessionAction,
-  storeWrongPositionsAction,
+  storeWrongMovementsInfoAction,
 } from './actions'
 
 export type DanceActionType = ActionType<
   | typeof fetchActiveDanceSessionAction
   | typeof endActiveDanceSessionAction
   | typeof startNewDanceSessionAction
-  | typeof storeWrongPositionsAction
+  | typeof storeWrongMovementsInfoAction
 >
 
 interface DanceState {
@@ -42,7 +42,7 @@ export default (state = initialState, action: DanceActionType) => {
         active: undefined,
       }
     }
-    case getType(storeWrongPositionsAction.success): {
+    case getType(storeWrongMovementsInfoAction.success): {
       const newPos = [action.payload, ...state.wrongPositions]
       return {
         ...state,

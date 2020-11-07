@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
 import { getMinuteSecondString } from 'utilities/datetime'
-import { storeWrongPositions } from 'store/dance/actions'
+import { storeWrongMovementsInfo } from 'store/dance/actions'
 import Card from 'components/Card'
 import Stack, { Gutter } from 'components/Stack'
 import { Title } from 'components/Typography'
@@ -26,7 +26,7 @@ interface OwnProps {
 
 const CurrentPosition: React.FC<Props> = ({
   dancerProfiles,
-  storeWrongPositions,
+  storeWrongMovementsInfo,
 }) => {
   const [position, setPosition] = React.useState([0, 0, 0])
 
@@ -55,9 +55,10 @@ const CurrentPosition: React.FC<Props> = ({
           position: predictedPosition,
           correctPosition,
           syncDelay: newMovement.syncDelay,
+          type: 'position',
           time: getMinuteSecondString(new Date(newMovement.date), startTime), //todo minus off the start time based on the first signal move
         }
-        storeWrongPositions(wrongPosition)
+        storeWrongMovementsInfo(wrongPosition)
       }
     })
 
@@ -89,7 +90,7 @@ const CurrentPosition: React.FC<Props> = ({
 const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(
     {
-      storeWrongPositions: storeWrongPositions,
+      storeWrongMovementsInfo: storeWrongMovementsInfo,
     },
     dispatch,
   )

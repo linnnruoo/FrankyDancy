@@ -53,5 +53,6 @@ export type WrongPosition = {
   position: number[] // e.g [1,2,3]
   correctPosition: number[]
   syncDelay: number
+  type: string // position or move
   time: string
 }
