@@ -31,7 +31,7 @@ export type Movement = {
   move: Move[]
   position: string // e.g '1 2 3'
   correctPosition: string // e.g '1 2 3'
-  syncDelay: string
+  syncDelay: number
   date: Date
 }
 

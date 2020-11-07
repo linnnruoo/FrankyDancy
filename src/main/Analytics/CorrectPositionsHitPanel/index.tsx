@@ -96,7 +96,7 @@ const CorrectPositionsHitPanel: React.FC<Props> = ({
         const wrongPosition = {
           position: predictedPosition,
           correctPosition,
-          syncDelay: parseInt(newMovement.syncDelay),
+          syncDelay: newMovement.syncDelay,
           time: getMinuteSecondString(new Date(newMovement.date), startTime), //todo minus off the start time based on the first signal move
         }
         storeWrongPositions(wrongPosition)
