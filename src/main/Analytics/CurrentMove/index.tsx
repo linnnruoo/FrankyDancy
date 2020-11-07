@@ -36,7 +36,7 @@ const CurrentMove: React.FC<Props> = ({ dancerProfiles }) => {
     if (currMoves) {
       return _.map(currMoves, (move, index) => {
         return (
-          <Stack center vertical gutter={Gutter.SMALL}>
+          <Stack center vertical gutter={Gutter.MINI}>
             <Avatar
               src={dancerProfiles[index + 1].url}
               alt={dancerProfiles[index + 1].name}
@@ -44,6 +44,7 @@ const CurrentMove: React.FC<Props> = ({ dancerProfiles }) => {
             />
             <Stack center vertical>
               <img
+                width="60%"
                 src={getMoveUrl(move)}
                 alt="test"
                 style={{ maxHeight: 100, minHeight: 100, width: 'auto' }}

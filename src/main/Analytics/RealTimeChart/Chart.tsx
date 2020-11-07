@@ -221,7 +221,7 @@ const Chart: React.FC<Props> = ({
 const ChartContainer = styled(Stack)`
   canvas {
     width: 100% !important;
-    min-height: 300px !important;
+    min-height: 400px !important;
     height: 300px !important;
   }
 `
