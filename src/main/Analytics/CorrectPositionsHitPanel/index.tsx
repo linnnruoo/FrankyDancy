@@ -134,22 +134,23 @@ const CorrectPositionsHitPanel: React.FC<Props> = ({
   React.useEffect(updateChartLabels, [dancerNames])
 
   return (
-    <Card width="30%">
-      <Stack vertical gutter={Gutter.SMALL}>
-        <Title>Correct Positions Hit</Title>
-        <ChartContainer>
-          <Bar
-            data={chartData}
-            options={chartOptions}
-            ref={(ref) => {
-              if (ref) {
-                chartRef = ref
-              }
-            }}
-          />
-        </ChartContainer>
-      </Stack>
-    </Card>
+    <></>
+    // <Card width="30%">
+    //   <Stack vertical gutter={Gutter.SMALL}>
+    //     <Title>Correct Positions Hit</Title>
+    //     <ChartContainer>
+    //       <Bar
+    //         data={chartData}
+    //         options={chartOptions}
+    //         ref={(ref) => {
+    //           if (ref) {
+    //             chartRef = ref
+    //           }
+    //         }}
+    //       />
+    //     </ChartContainer>
+    //   </Stack>
+    // </Card>
   )
 }
 

@@ -33,10 +33,6 @@ const Analytics: React.FC<Props> = ({ dancerProfiles, endDanceSession }) => {
               <CurrentMove dancerProfiles={dancerProfiles} />
             </Stack>
             <RealTimeChart toReset={toReset} setReset={setReset} />
-            {/* <Stack gutter={Gutter.SMALL}>
-              <CorrectPositions />
-              <TotalMovesPanel />
-            </Stack> */}
           </Stack>
         </Layout>
       </Layout>

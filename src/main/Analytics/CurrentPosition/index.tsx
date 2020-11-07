@@ -1,5 +1,10 @@
 import React from 'react'
+import _ from 'lodash'
+import { connect } from 'react-redux'
+import { bindActionCreators, Dispatch } from 'redux'
 
+import { getMinuteSecondString } from 'utilities/datetime'
+import { storeWrongPositions } from 'store/dance/actions'
 import Card from 'components/Card'
 import Stack, { Gutter } from 'components/Stack'
 import { Title } from 'components/Typography'
@@ -9,19 +14,53 @@ import { DancerProfile, Movement } from 'common/models'
 
 import AvatarCard from './AvatarCard'
 
-interface Props {
+// to keep track of the wrong positions made
+let firstMovementReceived: boolean = false // indicate if the first move received
+let startTime: Date
+
+type Props = CombinedProps<() => {}, typeof mapDispatchToProps> & OwnProps
+
+interface OwnProps {
   dancerProfiles: Dict<DancerProfile>
 }
 
-const CurrentPosition: React.FC<Props> = ({ dancerProfiles }) => {
+const CurrentPosition: React.FC<Props> = ({
+  dancerProfiles,
+  storeWrongPositions,
+}) => {
   const [position, setPosition] = React.useState([0, 0, 0])
 
   const fetchCurrentMovement = () => {
     socket.on(events.MOVEMENT_INSERTION_EVENT, (newMovement: Movement) => {
-      setPosition(
-        newMovement.position.split(' ').map((strNum) => parseInt(strNum)),
-      )
+      // indicate if the first move received
+      if (!firstMovementReceived) {
+        startTime = new Date(newMovement.date)
+        firstMovementReceived = true
+      }
+
+      // update positions
+      const predictedPosition = newMovement.position
+        .split(' ')
+        .map((strNum) => parseInt(strNum))
+
+      const correctPosition = newMovement.correctPosition
+        .split(' ')
+        .map((strNum) => parseInt(strNum))
+
+      setPosition(predictedPosition)
+
+      if (!_.isEqual(predictedPosition, correctPosition)) {
+        // call an action to store the wrong positions for the sider panel
+        const wrongPosition = {
+          position: predictedPosition,
+          correctPosition,
+          syncDelay: newMovement.syncDelay,
+          time: getMinuteSecondString(new Date(newMovement.date), startTime), //todo minus off the start time based on the first signal move
+        }
+        storeWrongPositions(wrongPosition)
+      }
     })
+
     return () => {
       socket.emit('disconnect')
       socket.disconnect()
@@ -47,4 +86,12 @@ const CurrentPosition: React.FC<Props> = ({ dancerProfiles }) => {
   )
 }
 
-export default CurrentPosition
+const mapDispatchToProps = (dispatch: Dispatch) =>
+  bindActionCreators(
+    {
+      storeWrongPositions: storeWrongPositions,
+    },
+    dispatch,
+  )
+
+export default connect(null, mapDispatchToProps)(CurrentPosition)

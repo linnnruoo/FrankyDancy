@@ -46,16 +46,22 @@ const SidePanel: React.FC<Props> = ({ dancerProfiles, wrongPositions }) => {
                   <Title color={RED}>Wrong Position</Title>
                 </Stack>
                 <Stack alignItems="center" justifyContent="space-around">
-                  <Stack alignItems="center" width="100px">
-                    <Text>Correct:</Text>
+                  <Stack
+                    justifyContent="center"
+                    style={{ maxWidth: 100, minWidth: 100 }}
+                  >
+                    <Text>Expected:</Text>
                   </Stack>
                   <Stack center gutter={Gutter.EXTRA_SMALL}>
                     {renderPositionGroup(positionInfo.correctPosition)}
                   </Stack>
                 </Stack>
                 <Stack alignItems="center" justifyContent="space-around">
-                  <Stack alignItems="center" width="100px">
-                    <Text>Wrong:</Text>
+                  <Stack
+                    justifyContent="center"
+                    style={{ maxWidth: 100, minWidth: 100 }}
+                  >
+                    <Text>Actual:</Text>
                   </Stack>
                   <Stack center gutter={Gutter.EXTRA_SMALL}>
                     {renderPositionGroup(positionInfo.position)}

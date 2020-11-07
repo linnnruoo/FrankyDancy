@@ -1,16 +1,15 @@
 import React from 'react'
 import _ from 'lodash'
+import { Spin } from 'antd'
 
 import Card from 'components/Card'
 import Stack, { Gutter } from 'components/Stack'
 import { Text, Title } from 'components/Typography'
+import Avatar from 'components/Avatar'
 import Move, { getMoveName, getMoveUrl } from 'common/moves'
 import { DancerProfile, Movement } from 'common/models'
 import * as events from 'common/events'
 import socket from 'configs/socket'
-import AvatarCard from '../CurrentPosition/AvatarCard'
-import Avatar from 'components/Avatar'
-import { Spin } from 'antd'
 
 interface Props {
   dancerProfiles: Dict<DancerProfile>
