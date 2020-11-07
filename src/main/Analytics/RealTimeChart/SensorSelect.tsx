@@ -30,10 +30,10 @@ const SensorDataSelect: React.FC<Props> = ({
             selectSensorType(newSelection)
           }}
         >
-          <Option value={ACCELEROMETER}>Accelerometer</Option>
-          <Option value={GYROSCOPE}>Gyroscope</Option>
+          <Option value={ACCELEROMETER}>Magnitude</Option>
+          <Option value={GYROSCOPE}>Time</Option>
         </Select>
-        <Select
+        {/* <Select
           defaultValue={dataType}
           onChange={(dataType) => {
             const newSelection = dataType as DATATYPE
@@ -43,7 +43,7 @@ const SensorDataSelect: React.FC<Props> = ({
           <Option value={DATATYPE.X}>x</Option>
           <Option value={DATATYPE.Y}>y</Option>
           <Option value={DATATYPE.Z}>z</Option>
-        </Select>
+        </Select> */}
       </Stack>
     </SelectContainer>
   )

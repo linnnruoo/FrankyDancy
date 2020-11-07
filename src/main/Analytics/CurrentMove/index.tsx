@@ -16,11 +16,11 @@ interface Props {
 }
 
 const CurrentMove: React.FC<Props> = ({ dancerProfiles }) => {
-  const [currMoves, setMove] = React.useState<Move[]>()
+  const [currMoves, setMoves] = React.useState<Move[]>()
 
   const fetchCurrentMovement = () => {
     socket.on(events.MOVEMENT_INSERTION_EVENT, (newMovement: Movement) => {
-      setMove(newMovement.move)
+      setMoves(newMovement.moves)
     })
     return () => {
       socket.emit('disconnect')

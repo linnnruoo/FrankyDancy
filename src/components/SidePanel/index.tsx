@@ -52,7 +52,9 @@ const SidePanel: React.FC<Props> = ({ dancerProfiles, wrongPositions }) => {
                 <Text>Expected:</Text>
               </Stack>
               <Stack center gutter={Gutter.EXTRA_SMALL}>
-                {renderPositionGroup(positionInfo.correctPosition)}
+                {renderPositionGroup(
+                  _.get(positionInfo, 'correctPosition', []),
+                )}
               </Stack>
             </Stack>
             <Stack alignItems="center" justifyContent="space-around">
@@ -63,7 +65,7 @@ const SidePanel: React.FC<Props> = ({ dancerProfiles, wrongPositions }) => {
                 <Text>Actual:</Text>
               </Stack>
               <Stack center gutter={Gutter.EXTRA_SMALL}>
-                {renderPositionGroup(positionInfo.position)}
+                {renderPositionGroup(_.get(positionInfo, 'position', []))}
               </Stack>
             </Stack>
           </Stack>
@@ -74,8 +76,14 @@ const SidePanel: React.FC<Props> = ({ dancerProfiles, wrongPositions }) => {
 
   const renderLoader = () => {
     return (
-      <Stack fillParentHeight center>
+      <Stack
+        vertical
+        fillParentHeight
+        center
+        style={{ margin: 30, textAlign: 'center' }}
+      >
         <Spin size="large" />
+        <Text>Mistakes made during a dance will be shown here</Text>
       </Stack>
     )
   }
@@ -84,7 +92,7 @@ const SidePanel: React.FC<Props> = ({ dancerProfiles, wrongPositions }) => {
     <Sider style={{ background: '#f6f8ff', overflowY: 'auto' }} width={400}>
       <Stack
         fillParentHeight
-        style={{ margin: 20 }}
+        style={{ padding: 20 }}
         vertical
         gutter={Gutter.REGULAR}
       >

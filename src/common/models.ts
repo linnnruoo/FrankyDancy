@@ -28,7 +28,8 @@ export type Dance = {
 
 export type Movement = {
   _id: string
-  move: Move[]
+  move: Move
+  moves: Move[]
   position: string // e.g '1 2 3'
   correctPosition: string // e.g '1 2 3'
   syncDelay: number
@@ -50,8 +51,10 @@ export type Sensor = {
 }
 
 export type WrongPosition = {
-  position: number[] // e.g [1,2,3]
-  correctPosition: number[]
+  position?: number[] // e.g [1,2,3]
+  correctPosition?: number[]
+  moves?: number[]
+  correctMove?: number
   syncDelay: number
   type: string // position or move
   time: string

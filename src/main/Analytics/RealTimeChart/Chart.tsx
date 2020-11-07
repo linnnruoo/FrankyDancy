@@ -13,18 +13,14 @@ import Stack from 'components/Stack'
 import { Sensor } from 'common/models'
 import { MINT, PUMPKIN, VIOLET } from 'common/colors'
 import { ACCELEROMETER, DATATYPE } from 'common/sensor'
+import { getMinuteSecondString } from 'utilities/datetime'
 
-let gyroData: any = [
-  { x: [], y: [], z: [] },
-  { x: [], y: [], z: [] },
-  { x: [], y: [], z: [] },
-]
-
-let acceleroData: any = [
-  { x: [], y: [], z: [] },
-  { x: [], y: [], z: [] },
-  { x: [], y: [], z: [] },
-]
+// to see who do a bigger move
+let magnitudeData: any = [[], [], []]
+let magnitudeDataWRTTime: any = [[], [], []] // see whos slower
+let startTime: any = [null, null, null]
+let firstMovementReceived: boolean = false
+let firstStartTime: Date
 
 const chartOptions = {
   responsive: true,
@@ -33,10 +29,18 @@ const chartOptions = {
     xAxes: [
       {
         type: 'time',
-        display: false,
+        // display: false,
+        time: {
+          // stepSize: ,
+          unit: 'second' as any,
+          parser: 'mm:ss',
+          displayFormats: {
+            second: 'mm:ss',
+          },
+        },
         ticks: {
           autoSkip: true,
-          display: false,
+          display: true,
         },
         gridlines: {
           display: false,
@@ -79,9 +83,9 @@ const Chart: React.FC<Props> = ({
     // const dancersData = getDancersData()
     let dancersData: any
     if (sensorType === ACCELEROMETER) {
-      dancersData = acceleroData
+      dancersData = magnitudeData
     } else {
-      dancersData = gyroData
+      dancersData = magnitudeDataWRTTime
     }
 
     return {
@@ -90,21 +94,21 @@ const Chart: React.FC<Props> = ({
           label: '1',
           lineTension: 0.5,
           fill: false,
-          data: dancersData[0][dataType],
+          data: dancersData[0],
           borderColor: MINT,
         },
         {
           label: '2',
           lineTension: 0.5,
           fill: false,
-          data: dancersData[1][dataType],
+          data: dancersData[1],
           borderColor: VIOLET,
         },
         {
           label: '3',
           lineTension: 0.5,
           fill: false,
-          data: dancersData[2][dataType],
+          data: dancersData[2],
           borderColor: PUMPKIN,
         },
       ],
@@ -118,46 +122,40 @@ const Chart: React.FC<Props> = ({
 
   const fetchSensorData = () => {
     socket.on(events.SENSOR_INSERTION_EVENT, (sensor: Sensor) => {
+      // TODO reset timer for each person?
+      // detect if its new data?
+      if (!firstMovementReceived) {
+        firstStartTime = new Date(sensor.date)
+        firstMovementReceived = true
+      }
+
       // pipe different sensor data into the corresponding pos
       const indexPos = sensor.dancerNo - 1
-      const now = new Date()
 
-      gyroData[indexPos] = {
-        x: [
-          ...gyroData[indexPos].x,
-          { x: now, y: _.get(sensor, ['gyroscope', 'x'], 0) },
-        ],
-        y: [
-          ...gyroData[indexPos].y,
-          { x: now, y: _.get(sensor, ['gyroscope', 'y'], 0) },
-        ],
-        z: [
-          ...gyroData[indexPos].z,
-          { x: now, y: _.get(sensor, ['gyroscope', 'z'], 0) },
-        ],
-      }
-      acceleroData[indexPos] = {
-        x: [
-          ...acceleroData[indexPos].x,
-          { x: now, y: _.get(sensor, ['accelerometer', 'x'], 0) },
-        ],
-        y: [
-          ...acceleroData[indexPos].y,
-          { x: now, y: _.get(sensor, ['accelerometer', 'y'], 0) },
-        ],
-        z: [
-          ...acceleroData[indexPos].z,
-          { x: now, y: _.get(sensor, ['accelerometer', 'z'], 0) },
-        ],
+      if (!startTime[indexPos]) {
+        startTime[indexPos] = new Date(sensor.date)
       }
 
-      if (gyroData[indexPos].x.length > 20) {
-        gyroData[indexPos].x.shift()
-        gyroData[indexPos].y.shift()
-        gyroData[indexPos].z.shift()
-        acceleroData[indexPos].x.shift()
-        acceleroData[indexPos].y.shift()
-        acceleroData[indexPos].z.shift()
+      const now = new Date(sensor.date)
+
+      const timelapseWRTDancer = getMinuteSecondString(now, startTime[indexPos])
+      const timelapseWRTDance = getMinuteSecondString(now, firstStartTime)
+
+      const { x, y, z } = sensor.accelerometer
+      const magnitude = Math.sqrt(x * x + y * y + z * z)
+
+      magnitudeData[indexPos] = [
+        ...magnitudeData[indexPos],
+        { x: timelapseWRTDancer, y: magnitude },
+      ]
+      magnitudeDataWRTTime[indexPos] = [
+        ...magnitudeDataWRTTime[indexPos],
+        { x: timelapseWRTDance, y: magnitude },
+      ]
+
+      if (magnitudeData[indexPos].length > 20) {
+        magnitudeData[indexPos].shift()
+        magnitudeDataWRTTime[indexPos].shift()
       }
     })
 
@@ -187,23 +185,18 @@ const Chart: React.FC<Props> = ({
   // To clear all the existing sensor datadata stored
   const resetSensorData = () => {
     if (toReset) {
-      gyroData = [
-        { x: [], y: [], z: [] },
-        { x: [], y: [], z: [] },
-        { x: [], y: [], z: [] },
-      ]
-
-      acceleroData = [
-        { x: [], y: [], z: [] },
-        { x: [], y: [], z: [] },
-        { x: [], y: [], z: [] },
-      ]
+      magnitudeData = [[], [], []]
+      magnitudeDataWRTTime = [[], [], []]
       setReset(false)
     }
   }
 
   React.useEffect(resetSensorData, [toReset])
 
+  // TODO: display 'X is the slowest, Y is the fastest', 'X did the bigger move'
+  // TODO: one chart -> time series to show whos slowest whos fastest TIME GRAPH
+  // TODO: 2nd chart -> measure dancer1,2,3 start, then get corresponding time diff for subsequent moves -> MAGNITUDE GRAPH
+  // then ?? seconds later, clear all the data?
   return (
     <>
       <Stack
