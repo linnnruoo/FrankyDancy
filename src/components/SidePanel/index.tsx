@@ -7,10 +7,11 @@ import { RootState } from 'store/rootReducer'
 import { getWrongPositionsCollection } from 'store/dance/selector'
 import Stack, { Gutter } from 'components/Stack'
 import Card from 'components/Card'
-import { DancerProfile } from 'common/models'
+import { DancerProfile, WrongPosition } from 'common/models'
 import { Text, Title } from 'components/Typography'
 import { RED } from 'common/colors'
 import Avatar from 'components/Avatar'
+import { getMoveUrl } from 'common/moves'
 
 const { Sider } = Layout
 
@@ -20,7 +21,7 @@ interface OwnProps {
   dancerProfiles: Dict<DancerProfile>
 }
 
-const SidePanel: React.FC<Props> = ({ dancerProfiles, wrongPositions }) => {
+const SidePanel: React.FC<Props> = ({ dancerProfiles, wrongMovements }) => {
   const renderPositionGroup = (positions: number[]) => {
     return _.map(positions, (dancerNo) => (
       <Avatar
@@ -35,42 +36,84 @@ const SidePanel: React.FC<Props> = ({ dancerProfiles, wrongPositions }) => {
     ))
   }
 
-  const renderWrongMovements = () => {
-    return _.map(wrongPositions, (positionInfo) => {
-      return (
-        <Card>
-          <Stack fillParentWidth vertical gutter={Gutter.SMALL}>
-            <Stack gutter={Gutter.SMALL}>
-              <Title>Time: {positionInfo.time} - </Title>
-              <Title color={RED}>Wrong Position</Title>
+  const renderWrongPosition = (info: WrongPosition) => {
+    return (
+      <Card>
+        <Stack fillParentWidth vertical gutter={Gutter.SMALL}>
+          <Stack gutter={Gutter.SMALL}>
+            <Title>Time: {info.time} - </Title>
+            <Title color={RED}>Wrong Position</Title>
+          </Stack>
+          <Stack alignItems="center" justifyContent="space-around">
+            <Stack
+              justifyContent="center"
+              style={{ maxWidth: 100, minWidth: 100 }}
+            >
+              <Text>Expected:</Text>
             </Stack>
-            <Stack alignItems="center" justifyContent="space-around">
-              <Stack
-                justifyContent="center"
-                style={{ maxWidth: 100, minWidth: 100 }}
-              >
-                <Text>Expected:</Text>
-              </Stack>
-              <Stack center gutter={Gutter.EXTRA_SMALL}>
-                {renderPositionGroup(
-                  _.get(positionInfo, 'correctPosition', []),
-                )}
-              </Stack>
-            </Stack>
-            <Stack alignItems="center" justifyContent="space-around">
-              <Stack
-                justifyContent="center"
-                style={{ maxWidth: 100, minWidth: 100 }}
-              >
-                <Text>Actual:</Text>
-              </Stack>
-              <Stack center gutter={Gutter.EXTRA_SMALL}>
-                {renderPositionGroup(_.get(positionInfo, 'position', []))}
-              </Stack>
+            <Stack center gutter={Gutter.EXTRA_SMALL}>
+              {renderPositionGroup(_.get(info, 'correctPosition', []))}
             </Stack>
           </Stack>
-        </Card>
-      )
+          <Stack alignItems="center" justifyContent="space-around">
+            <Stack
+              justifyContent="center"
+              style={{ maxWidth: 100, minWidth: 100 }}
+            >
+              <Text>Actual:</Text>
+            </Stack>
+            <Stack center gutter={Gutter.EXTRA_SMALL}>
+              {renderPositionGroup(_.get(info, 'position', []))}
+            </Stack>
+          </Stack>
+        </Stack>
+      </Card>
+    )
+  }
+
+  const renderInconsistentMove = (info: WrongPosition) => {
+    return (
+      <Card>
+        <Stack fillParentWidth vertical gutter={Gutter.SMALL}>
+          <Stack gutter={Gutter.SMALL}>
+            <Title>Time: {info.time} - </Title>
+            <Title color={RED}>Wrong Move</Title>
+          </Stack>
+          <Stack alignItems="center" justifyContent="space-around">
+            <Stack
+              justifyContent="center"
+              style={{ maxWidth: 100, minWidth: 100 }}
+            >
+              <Text>Dancers:</Text>
+            </Stack>
+            <Stack center gutter={Gutter.EXTRA_SMALL}>
+              {renderPositionGroup([1, 2, 3])}
+            </Stack>
+          </Stack>
+          <Stack alignItems="center" justifyContent="space-around">
+            <Stack
+              justifyContent="center"
+              style={{ maxWidth: 100, minWidth: 100 }}
+            >
+              <Text>Moves:</Text>
+            </Stack>
+            <Stack center gutter={Gutter.EXTRA_SMALL}>
+              {_.map(info.moves, (move) => (
+                <img width="48" src={getMoveUrl(move)} alt="test" />
+              ))}
+            </Stack>
+          </Stack>
+        </Stack>
+      </Card>
+    )
+  }
+
+  const renderWrongMovements = () => {
+    return _.map(wrongMovements, (info) => {
+      if (info.type === 'position') {
+        return renderWrongPosition(info)
+      }
+      return renderInconsistentMove(info)
     })
   }
 
@@ -96,14 +139,14 @@ const SidePanel: React.FC<Props> = ({ dancerProfiles, wrongPositions }) => {
         vertical
         gutter={Gutter.REGULAR}
       >
-        {_.isEmpty(wrongPositions) ? renderLoader() : renderWrongMovements()}
+        {_.isEmpty(wrongMovements) ? renderLoader() : renderWrongMovements()}
       </Stack>
     </Sider>
   )
 }
 
 const mapStateToProps = (s: RootState) => ({
-  wrongPositions: getWrongPositionsCollection(s),
+  wrongMovements: getWrongPositionsCollection(s),
 })
 
 export default connect(mapStateToProps)(SidePanel)

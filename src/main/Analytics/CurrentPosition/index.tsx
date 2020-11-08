@@ -30,6 +30,26 @@ const CurrentPosition: React.FC<Props> = ({
 }) => {
   const [position, setPosition] = React.useState([0, 0, 0])
 
+  const checkForSameMove = (newMovement: Movement, startTime: Date) => {
+    // call action to store the inconsistent move
+    let isSameMove = true
+    const { moves, move } = newMovement
+    for (let i = 0; i < 3; i++) {
+      if (moves[i] !== move) {
+        isSameMove = false
+      }
+    }
+    if (isSameMove === false) {
+      const inconsistentMove = {
+        moves,
+        type: 'move',
+        syncDelay: newMovement.syncDelay,
+        time: getMinuteSecondString(new Date(newMovement.date), startTime),
+      }
+      storeWrongMovementsInfo(inconsistentMove)
+    }
+  }
+
   const fetchCurrentMovement = () => {
     socket.on(events.MOVEMENT_INSERTION_EVENT, (newMovement: Movement) => {
       // indicate if the first move received
@@ -60,6 +80,8 @@ const CurrentPosition: React.FC<Props> = ({
         }
         storeWrongMovementsInfo(wrongPosition)
       }
+
+      checkForSameMove(newMovement, startTime)
     })
 
     return () => {

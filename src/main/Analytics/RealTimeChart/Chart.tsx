@@ -5,7 +5,6 @@
 import React from 'react'
 import { ChartData, Line } from 'react-chartjs-2'
 import styled from 'styled-components'
-import _ from 'lodash'
 
 import socket from 'configs/socket'
 import * as events from 'common/events'
@@ -122,7 +121,6 @@ const Chart: React.FC<Props> = ({
 
   const fetchSensorData = () => {
     socket.on(events.SENSOR_INSERTION_EVENT, (sensor: Sensor) => {
-      // TODO reset timer for each person?
       // detect if its new data?
       if (!firstMovementReceived) {
         firstStartTime = new Date(sensor.date)
@@ -166,7 +164,22 @@ const Chart: React.FC<Props> = ({
     }
   }
 
+  const fetchResetFlag = () => {
+    socket.on(events.MOVE_RESET_EVENT, () => {
+      magnitudeData = [[], [], []]
+      magnitudeDataWRTTime = [[], [], []]
+      startTime = [null, null, null]
+    })
+
+    return () => {
+      socket.emit('disconnect')
+      socket.disconnect()
+      socket.close()
+    }
+  }
+
   React.useEffect(fetchSensorData, [])
+  React.useEffect(fetchResetFlag, [])
 
   const createNewInterval = () => {
     const interval = setInterval(() => {
