@@ -164,18 +164,18 @@ const Chart: React.FC<Props> = ({
     }
   }
 
+  // HECK: new movement means got reset flag
   const fetchResetFlag = () => {
-    socket.on(events.MOVE_RESET_EVENT, () => {
-      magnitudeData = [[], [], []]
-      magnitudeDataWRTTime = [[], [], []]
-      startTime = [null, null, null]
-    })
-
-    return () => {
-      socket.emit('disconnect')
-      socket.disconnect()
-      socket.close()
-    }
+    // socket.on(events.MOVEMENT_INSERTION_EVENT, () => {
+    //   magnitudeData = [[], [], []]
+    //   magnitudeDataWRTTime = [[], [], []]
+    //   startTime = [null, null, null]
+    // })
+    // return () => {
+    //   socket.emit('disconnect')
+    //   socket.disconnect()
+    //   socket.close()
+    // }
   }
 
   React.useEffect(fetchSensorData, [])

@@ -22,7 +22,7 @@ const Text = styled(AntText)<Props>`
 const Title = styled(Text)<Props>`
   color: ${({ color }) => color || DARK_BLUE};
   font-weight: 600;
-  font-size: 18px;
+  font-size: ${({ fontSize }) => fontSize || '18'}px;
 `
 
 export { Text, Title }

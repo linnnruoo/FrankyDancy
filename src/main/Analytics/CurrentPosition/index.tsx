@@ -58,27 +58,33 @@ const CurrentPosition: React.FC<Props> = ({
         firstMovementReceived = true
       }
 
-      // update positions
-      const predictedPosition = newMovement.position
-        .split(' ')
-        .map((strNum) => parseInt(strNum))
+      // edge case for wakanda logout, no correct position will be sent
+      if (
+        !_.isEmpty(newMovement['position']) &&
+        !_.isEmpty(newMovement['correctPosition'])
+      ) {
+        // update positions
+        const predictedPosition = newMovement.position
+          .split(' ')
+          .map((strNum) => parseInt(strNum))
 
-      const correctPosition = newMovement.correctPosition
-        .split(' ')
-        .map((strNum) => parseInt(strNum))
+        const correctPosition = newMovement.correctPosition
+          .split(' ')
+          .map((strNum) => parseInt(strNum))
 
-      setPosition(predictedPosition)
+        setPosition(predictedPosition)
 
-      if (!_.isEqual(predictedPosition, correctPosition)) {
-        // call an action to store the wrong positions for the sider panel
-        const wrongPosition = {
-          position: predictedPosition,
-          correctPosition,
-          syncDelay: newMovement.syncDelay,
-          type: 'position',
-          time: getMinuteSecondString(new Date(newMovement.date), startTime), //todo minus off the start time based on the first signal move
+        if (!_.isEqual(predictedPosition, correctPosition)) {
+          // call an action to store the wrong positions for the sider panel
+          const wrongPosition = {
+            position: predictedPosition,
+            correctPosition,
+            syncDelay: newMovement.syncDelay,
+            type: 'position',
+            time: getMinuteSecondString(new Date(newMovement.date), startTime), //todo minus off the start time based on the first signal move
+          }
+          storeWrongMovementsInfo(wrongPosition)
         }
-        storeWrongMovementsInfo(wrongPosition)
       }
 
       checkForSameMove(newMovement, startTime)

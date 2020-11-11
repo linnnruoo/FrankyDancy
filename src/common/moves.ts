@@ -1,12 +1,13 @@
 enum Move {
   Hair = 1,
-  Rocket = 2,
-  Zigzag = 3,
+  Pushback = 2,
+  Rocket = 3,
   Scarecrow = 4,
   Shouldershrug = 5,
-  Windows = 6,
-  Pushback = 7,
+  Windowwipe = 6,
+  Zigzag = 7,
   Elbowlock = 8,
+  Logout = 9,
 }
 
 export enum MoveUrl {
@@ -16,8 +17,9 @@ export enum MoveUrl {
   Rocket = 'https://i.imgur.com/kK35SYR.png',
   Scarecrow = 'https://i.imgur.com/h2pbVVi.png',
   Shouldershrug = 'https://i.imgur.com/g28PHpc.jpg',
-  Windows = 'https://i.imgur.com/gYLPr1j.png',
+  Windowwipe = 'https://i.imgur.com/gYLPr1j.png',
   Zigzag = 'https://i.imgur.com/2dENb9M.png',
+  Logout = 'https://i.imgur.com/0QgeMcI.png',
 }
 
 export enum MoveName {
@@ -26,9 +28,10 @@ export enum MoveName {
   Rocket = 'Rocket',
   Scarecrow = 'Scarecrow',
   Shouldershrug = 'Shoulder Shrug',
-  Windows = 'Windows',
+  Windowwipe = 'Window Wipe',
   Zigzag = 'Zig Zag',
   Elbowlock = 'Elbow Lock',
+  Logout = 'Logout',
 }
 
 export const getMoveKeys = () =>

@@ -77,7 +77,9 @@ const SidePanel: React.FC<Props> = ({ dancerProfiles, wrongMovements }) => {
         <Stack fillParentWidth vertical gutter={Gutter.SMALL}>
           <Stack gutter={Gutter.SMALL}>
             <Title>Time: {info.time} - </Title>
-            <Title color={RED}>Wrong Move</Title>
+            <Title fontSize={16} color={RED}>
+              Inconsistent Moves
+            </Title>
           </Stack>
           <Stack alignItems="center" justifyContent="space-around">
             <Stack
