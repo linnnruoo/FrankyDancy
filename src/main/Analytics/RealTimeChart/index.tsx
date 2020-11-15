@@ -1,19 +1,25 @@
 import React from 'react'
 
 import Card from 'components/Card'
-import { ACCELEROMETER, DATATYPE } from 'common/sensor'
+import { ACCELEROMETER, DATATYPE, GYROSCOPE } from 'common/sensor'
 
 import Chart from './Chart'
 import DancerPanel from './DancerPanel'
 import SensorDataSelect from './SensorSelect'
+import { DancerProfile } from 'common/models'
 
 interface Props {
+  dancerProfiles: Dict<DancerProfile>
   toReset: boolean
   setReset: (reset: boolean) => void
 }
 
-const RealTimeChart: React.FC<Props> = ({ toReset, setReset }) => {
-  const [sensorType, selectSensorType] = React.useState(ACCELEROMETER)
+const RealTimeChart: React.FC<Props> = ({
+  dancerProfiles,
+  toReset,
+  setReset,
+}) => {
+  const [sensorType, selectSensorType] = React.useState(GYROSCOPE)
   const [dataType, selectDataType] = React.useState(DATATYPE.X)
 
   return (
@@ -26,6 +32,7 @@ const RealTimeChart: React.FC<Props> = ({ toReset, setReset }) => {
         selectDataType={selectDataType}
       />
       <Chart
+        dancerProfiles={dancerProfiles}
         toReset={toReset}
         setReset={setReset}
         sensorType={sensorType}

@@ -5,14 +5,16 @@
 import React from 'react'
 import { ChartData, Line } from 'react-chartjs-2'
 import styled from 'styled-components'
+import _ from 'lodash'
 
 import socket from 'configs/socket'
 import * as events from 'common/events'
 import Stack from 'components/Stack'
-import { Sensor } from 'common/models'
+import { DancerProfile, Sensor } from 'common/models'
 import { MINT, PUMPKIN, VIOLET } from 'common/colors'
 import { ACCELEROMETER, DATATYPE } from 'common/sensor'
 import { getMinuteSecondString } from 'utilities/datetime'
+import { Title } from 'components/Typography'
 
 // to see who do a bigger move
 let magnitudeData: any = [[], [], []]
@@ -20,6 +22,12 @@ let magnitudeDataWRTTime: any = [[], [], []] // see whos slower
 let startTime: any = [null, null, null]
 let firstMovementReceived: boolean = false
 let firstStartTime: Date
+
+let isReset = false
+
+let fastDancerNo: any = null
+let midDancerNo: any = null // LOL WTF
+let slowDancerNo: any = null
 
 const chartOptions = {
   responsive: true,
@@ -40,6 +48,7 @@ const chartOptions = {
         ticks: {
           autoSkip: true,
           display: true,
+          // stepSize: 1,
         },
         gridlines: {
           display: false,
@@ -66,6 +75,7 @@ const chartOptions = {
 }
 
 interface Props {
+  dancerProfiles: Dict<DancerProfile>
   toReset: boolean
   setReset: (reset: boolean) => void
   sensorType: string
@@ -73,6 +83,7 @@ interface Props {
 }
 
 const Chart: React.FC<Props> = ({
+  dancerProfiles,
   toReset,
   setReset,
   sensorType,
@@ -127,11 +138,31 @@ const Chart: React.FC<Props> = ({
         firstMovementReceived = true
       }
 
+      //detect new set of moves
+      // needed because theres some delay (when we are fixing our positions) between next move and dance
+      if (isReset) {
+        magnitudeData = [[], [], []]
+        magnitudeDataWRTTime = [[], [], []]
+        startTime = [null, null, null]
+        isReset = false
+        fastDancerNo = null
+        midDancerNo = null
+        slowDancerNo = null
+      }
+
       // pipe different sensor data into the corresponding pos
       const indexPos = sensor.dancerNo - 1
 
       if (!startTime[indexPos]) {
         startTime[indexPos] = new Date(sensor.date)
+
+        if (!fastDancerNo) {
+          fastDancerNo = sensor.dancerNo
+        } else if (!midDancerNo) {
+          midDancerNo = sensor.dancerNo
+        } else {
+          slowDancerNo = sensor.dancerNo
+        }
       }
 
       const now = new Date(sensor.date)
@@ -151,7 +182,7 @@ const Chart: React.FC<Props> = ({
         { x: timelapseWRTDance, y: magnitude },
       ]
 
-      if (magnitudeData[indexPos].length > 20) {
+      if (magnitudeData[indexPos].length >= 60) {
         magnitudeData[indexPos].shift()
         magnitudeDataWRTTime[indexPos].shift()
       }
@@ -166,16 +197,14 @@ const Chart: React.FC<Props> = ({
 
   // HECK: new movement means got reset flag
   const fetchResetFlag = () => {
-    // socket.on(events.MOVEMENT_INSERTION_EVENT, () => {
-    //   magnitudeData = [[], [], []]
-    //   magnitudeDataWRTTime = [[], [], []]
-    //   startTime = [null, null, null]
-    // })
-    // return () => {
-    //   socket.emit('disconnect')
-    //   socket.disconnect()
-    //   socket.close()
-    // }
+    socket.on(events.MOVEMENT_INSERTION_EVENT, () => {
+      isReset = true
+    })
+    return () => {
+      socket.emit('disconnect')
+      socket.disconnect()
+      socket.close()
+    }
   }
 
   React.useEffect(fetchSensorData, [])
@@ -219,6 +248,18 @@ const Chart: React.FC<Props> = ({
         <ChartContainer>
           <Line data={chartData} options={chartOptions} />
         </ChartContainer>
+        {fastDancerNo && (
+          <Title>
+            {_.get(dancerProfiles, [fastDancerNo, 'name'])} is the fastest
+            dancer
+          </Title>
+        )}
+        {slowDancerNo && (
+          <Title>
+            {_.get(dancerProfiles, [slowDancerNo, 'name'])} is the slowest
+            dancer
+          </Title>
+        )}
       </Stack>
     </>
   )

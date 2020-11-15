@@ -128,7 +128,10 @@ const SidePanel: React.FC<Props> = ({ dancerProfiles, wrongMovements }) => {
         style={{ margin: 30, textAlign: 'center' }}
       >
         <Spin size="large" />
-        <Text>Mistakes made during a dance will be shown here</Text>
+        <Title>
+          <Text color={RED}>Mistakes</Text> made during a dance will be shown
+          here
+        </Title>
       </Stack>
     )
   }
